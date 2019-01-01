@@ -9,6 +9,10 @@ class Course:
         self.name = name
         self.students = []
 
+    @property
+    def student_count(self):
+        return len(self.students)
+
     def add_students(self, students: list):
         self.students += students
 
@@ -30,6 +34,15 @@ class Course:
 
     def __ne__(self, other):
         return not(self == other)
+
+    @property
+    def __dict__(self):
+        return {
+            'id': self.id,
+            'semester': self.semester,
+            'name': self.name,
+            'student_count': self.student_count
+        }
 
     def __str__(self):
         return "_".join([self.semester, self.name])

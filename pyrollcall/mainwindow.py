@@ -136,7 +136,7 @@ class MainWindow(Gtk.Window):
         courses_row = Gtk.ListBoxRow()
         courses_row.add(courses_box)
         courses_listbox.add(courses_row) 
-        self.courses_tree_view = TreeView(Gtk.ListStore(int, str, str), ["id", "semester", "Name"])
+        self.courses_tree_view = TreeView(Gtk.ListStore(int, str, str, int), ["id", "semester", "Name", "Student Count"])
         if self.database is not None:
             self.courses_tree_view.update(self.database.courses)
         courses_box.pack_start(self.courses_tree_view, True, True, 0)
@@ -176,8 +176,8 @@ class MainWindow(Gtk.Window):
     def start_rollcall(self, widget):
         form_dialog = FormDialog(self, title="Start a Roll Call", message="Which one is your class today?")
         # Add a student tree view to the dialog.
-        courses_list_store = Gtk.ListStore(int, str, str)
-        courses_tree_view = TreeView(courses_list_store, ["ID", "Semester", "Name"], Gtk.SelectionMode.MULTIPLE)
+        courses_list_store = Gtk.ListStore(int, str, str, int)
+        courses_tree_view = TreeView(courses_list_store, ["ID", "Semester", "Name", "Student Count"], Gtk.SelectionMode.MULTIPLE)
         form_dialog.add_tree_view(courses_tree_view, title="Courses")
         courses_tree_view.update(self.database.courses)
         response = form_dialog.run()
@@ -545,4 +545,5 @@ class TreeView(Gtk.TreeView):
                 if i >= len(self.column_titles):
                     break
                 obj_fields.append(value)
+                print(obj_fields)
             self.list_store.append(obj_fields)

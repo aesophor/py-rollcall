@@ -1,13 +1,17 @@
 # -*- encoding: utf-8 -*-
 
+import pyrollcall.utils as utils
+
 class Student:
-    def __init__(self, id: str, name: str, has_photos=False):
+    def __init__(self, id: str, name: str):
         self.id = id
         self.name = name
-        self.has_photos = has_photos
 
     @property
-    def photo_dir(self):
+    def has_photos(self):
+        return len(utils.list_images(self.get_photo_dir())) > 0
+
+    def get_photo_dir(self):
         return "faces/" + self.__str__() + "/"
 
     def __hash__(self):
@@ -20,6 +24,14 @@ class Student:
 
     def __ne__(self, other):
         return not(self == other)
+
+    @property
+    def __dict__(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'has_photos': self.has_photos
+        }
 
     def __str__(self):
         return "_".join([self.id, self.name])
