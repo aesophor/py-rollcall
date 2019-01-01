@@ -88,8 +88,6 @@ def recognize_face(db, img_path: str):
             names.append(name)
 
 
-
-
     # Loop over the recognized faces
     for ((top, right, bottom, left), name) in zip(boxes, names):
         # Draw the predicted face name on the images
