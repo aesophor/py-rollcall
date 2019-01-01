@@ -24,9 +24,6 @@ class Database:
             self.students = data["students"]
             self.face_encodings = data["face_encodings"]
 
-        for s in self.students:
-            s.has_photos = (len(utils.list_images(s.photo_dir)) > 0)
-
     def dump(self):
         """ Pickle courses and students to the file """
         with open(self.db_file_path, 'wb') as f:
