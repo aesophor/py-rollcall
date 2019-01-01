@@ -160,23 +160,13 @@ class MainWindow(Gtk.Window):
 
     def connect_db(self, database):
         self.database = database
-
-        """
-        c1 = self.database.add_course(1071, 'Image Processing')
-        s1 = self.database.add_student('U10516045', 'Marco Wang')
-        s2 = self.database.add_student('U10516046', 'Tsai')
-        s3 = self.database.add_student('U10516001', 'John')
-        c1.add_students([s1, s2, s3])
-        """
         self.courses_tree_view.bind(self.database.courses)
         self.students_tree_view.bind(self.database.students)
 
-       # self.session = Session(c1)
-       # self.update_session_tree_view()
-
 
     def sign_in(self, widget):
-        face.collect_face()
+        face_imgs_paths = face.collect_face()
+        print(face_imgs_paths)
 
 
     def on_create_btn_clicked(self, widget):
@@ -255,15 +245,30 @@ class MainWindow(Gtk.Window):
         form_dialog.add_tree_view(students_tree_view)
         students_tree_view.bind(self.database.students)
 
+        # Automatically selects (toggles) the students within this course.
+        students_tree_view.get_selection().select_all()
+        model, rows = students_tree_view.get_selection().get_selected_rows()
+        for row in rows:
+            tree_iter = model.get_iter(row)
+            primary_key = model.get_value(tree_iter, 0)
+            found = False
+            for student in course.students:
+                if student.id == primary_key:
+                    found = True
+            if found is False:
+                students_tree_view.get_selection().unselect_path(row)
+
         response = form_dialog.run()
 
         if response == Gtk.ResponseType.OK:
             course.year = year_entry.get_text()
             course.name = name_entry.get_text()
             selected_items = students_tree_view.get_selected_items()
+
+            course.students.clear()
             for student_id in selected_items:
                 s = self.database.get_student(student_id)
-                c.add_student(s)
+                course.add_student(s)
             self.courses_tree_view.bind(self.database.courses)
             self.database.dump()
 
@@ -461,5 +466,4 @@ class TreeView(Gtk.TreeView):
                 if i >= len(self.column_titles):
                     break
                 obj_fields.append(value)
-            print(obj_fields)
             self.list_store.append(obj_fields)
