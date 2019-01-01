@@ -216,8 +216,8 @@ class MainWindow(Gtk.Window):
 
 
     def sign_in(self, widget):
-        face_imgs_paths = face.collect_face()
-        print(face_imgs_paths)
+        img_path = face.collect_faces()[0]
+        face.recognize_face(img_path)
 
 
     def on_create_btn_clicked(self, widget):

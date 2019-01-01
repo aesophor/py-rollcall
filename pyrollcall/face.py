@@ -6,6 +6,8 @@ import face_recognition
 import cv2
 import os
 
+import pyrollcall.utils as utils
+
 class FaceEncoding:
     """ This class is a wrapper of a face encoding and the person's name """
     def __init__(self, encoding, name: str):
@@ -13,7 +15,7 @@ class FaceEncoding:
         self.name = name
 
 
-def collect_face(student=None, img_count=1, capture_key=0x20):
+def collect_faces(student=None, img_count=1, capture_key=0x20):
     """ Collect several images of a person's face via webcam
     :param student: The student of which we'll take photos
     :param img_count: Number of images to take
@@ -38,8 +40,7 @@ def collect_face(student=None, img_count=1, capture_key=0x20):
         key = cv2.waitKey(20)
 
         if key == capture_key:
-            # mkdir -p on config_location and datafile_location.
-            Path(photo_dir).mkdir(parents=True, exist_ok=True)
+            utils.mkdir(photo_dir)
             cv2.imwrite(photo_dir + str(current_img_no) + '.png', img)
             current_img_no += 1
             if current_img_no >= img_count:
@@ -82,6 +83,7 @@ def encode_faces(db, faces_dir: str):
 def recognize_face(db, img_path: str):
     """ Recognize the faces in the specified image
     :param img_path: Image which contains the face of a student
+    :return: The name of the person recognized
     """
     # Load the input image and convert it from BGR to RGB
     image = cv2.imread(img_path)

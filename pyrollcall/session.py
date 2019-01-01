@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-from datetime import datetime
-from pathlib import Path
+import pyrollcall.utils as utils
 
 class Session:
     """ Session records whether each student has arrived or not """
@@ -22,10 +21,9 @@ class Session:
 
     def export(self):
         """ Export the student arrival data to a log """
-        timestamp = datetime.now().strftime("%Y/%m/%d")
-
+        timestamp = utils.get_datestamp()
         log_dir = "logs/{}".format(timestamp)
-        Path(log_dir).mkdir(parents=True, exist_ok=True)
+        utils.mkdir(log_dir)
         log_file = "{}/{}.txt".format(log_dir, self.course.name)
 
         print("[INFO] Exported log to {}".format(log_file))
@@ -40,7 +38,7 @@ class Session:
 
         return "\r\n".join([
             "Course Name: " + self.course.name,
-            "Export Time: " + datetime.now().strftime("%Y/%m/%d %H:%M"),
+            "Export Time: " + utils.get_datetimestamp(),
             "Arrived: " + str(arrived) + " / Late: " + str(late) + " / Total: " + str(total),
             "Late Students: "]
         ) + "\r\n" + ",".join(late_student_names)
