@@ -6,6 +6,7 @@ import pickle
 
 from pyrollcall.course import Course
 from pyrollcall.student import Student
+import pyrollcall.utils as utils
 
 class Database:
     """ Implementation of a custom and lightweight database """
@@ -22,6 +23,9 @@ class Database:
             self.courses = data["courses"]
             self.students = data["students"]
             self.face_encodings = data["face_encodings"]
+
+        for s in self.students:
+            s.has_photos = (len(utils.list_images(s.photo_dir)) > 0)
 
     def dump(self):
         """ Pickle courses and students to the file """

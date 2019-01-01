@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
 
-from pathlib import Path
-from imutils import paths
 import face_recognition
 import cv2
 import os
@@ -63,7 +61,7 @@ def encode_faces(db, faces_dir: str):
     """ Encode all students faces in the specified course 
     :param course: Faces of each student in this course will be processed
     """
-    image_paths = list(paths.list_images(faces_dir))
+    image_paths = list(utils.list_images(faces_dir))
 
     for (i, image_path) in enumerate(image_paths):
         # Extract the person name from the image path.

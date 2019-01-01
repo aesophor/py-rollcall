@@ -1,9 +1,10 @@
 # -*- encoding: utf-8 -*-
 
 class Student:
-    def __init__(self, id: str, name: str):
+    def __init__(self, id: str, name: str, has_photos=False):
         self.id = id
         self.name = name
+        self.has_photos = has_photos
 
     @property
     def photo_dir(self):
