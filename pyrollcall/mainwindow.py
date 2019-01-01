@@ -31,7 +31,7 @@ class MainWindow(Gtk.Window):
 
         self.start_rollcall_btn = Gtk.Button("Start")
         self.end_rollcall_btn = Gtk.Button("End")
-        self.sign_in_btn = Gtk.Button("Sign In")
+        self.sign_in_btn = Gtk.Button("Sign in to class...")
         self.session_tree_view = None
         self.current_rollcall_course_label = Gtk.Label("No ongoing rollcall.")
 
