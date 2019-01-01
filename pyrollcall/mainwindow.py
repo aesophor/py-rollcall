@@ -112,7 +112,7 @@ class MainWindow(Gtk.Window):
         s3 = Student('U10516001', 'John')
         c.add_student([s1, s2, s3])
 
-        self.database.courses[0] = c
+        self.database.add_course(c)
 
         self.session = Session(c)
         self.update_session_tree_view()
@@ -125,9 +125,8 @@ class MainWindow(Gtk.Window):
         response = form_dialog.run()
 
         if response == Gtk.ResponseType.OK:
-            print('OK Clicked, creating course')
-            print(year_entry.get_text())
-            print(name_entry.get_text())
+            c = Course(year_entry.get_text(), name_entry.get_text())
+            self.database.add_course(c)
 
         form_dialog.destroy()
 
