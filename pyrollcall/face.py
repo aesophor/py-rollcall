@@ -1,16 +1,55 @@
-# vim: ft=python fileencoding=utf-8 sts=4 sw=4 et:
+# -*- encoding: utf-8 -*-
 
+from pathlib import Path
 from imutils import paths
 import face_recognition
 import cv2
 import os
-
 
 class FaceEncoding:
     """ This class is a wrapper of a face encoding and the person's name """
     def __init__(self, encoding, name: str):
         self.encoding = encoding
         self.name = name
+
+
+def collect_face(student=None, img_count=1, capture_key=0x20):
+    """ Collect several images of a person's face via webcam
+    :param student: The student of which we'll take photos
+    :param img_count: Number of images to take
+    :param capture_key: Keycode of the key which captures images (default=SPACE)
+    :return: A list of paths to the photos taken
+    """
+    current_img_no = 0
+    photo_dir = "faces/temp/" if student is None else student.photo_dir
+    webcam_title = "Face Collector" if student is None else "Face Collector ({})".format(student.name)
+
+    cv2.namedWindow(webcam_title)
+    cam = cv2.VideoCapture(0)
+
+    if cam.isOpened():
+        rval, img = cam.read()
+    else:
+        rval = False
+
+    while rval:
+        cv2.imshow(webcam_title, img)
+        rval, img = cam.read()
+        key = cv2.waitKey(20)
+
+        if key == capture_key:
+            # mkdir -p on config_location and datafile_location.
+            Path(photo_dir).mkdir(parents=True, exist_ok=True)
+            cv2.imwrite(photo_dir + str(current_img_no) + '.png', img)
+            current_img_no += 1
+            if current_img_no >= img_count:
+                break
+        elif key == 27:
+            break
+
+    cv2.destroyWindow(webcam_title)
+    del cam
+    return list(paths.list_images(photo_dir))
 
 
 def encode_faces(db, faces_dir: str):
@@ -100,4 +139,3 @@ def recognize_face(db, img_path: str):
     cv2.imshow("Image", image)
     cv2.waitKey(0)
     return names
-

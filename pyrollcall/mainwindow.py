@@ -49,6 +49,7 @@ class MainWindow(Gtk.Window):
         end_button = Gtk.Button("End")
         end_button.set_sensitive(False)
         sign_in_button = Gtk.Button("Sign In")
+        sign_in_button.connect("clicked", self.sign_in)
 
         header_box.pack_start(start_button, True, True, 0)
         header_box.pack_start(end_button, True, True, 0)
@@ -158,6 +159,10 @@ class MainWindow(Gtk.Window):
 
        # self.session = Session(c1)
        # self.update_session_tree_view()
+
+
+    def sign_in(self, widget):
+        face.collect_face()
 
 
     def create_course(self, widget):
