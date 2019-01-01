@@ -27,7 +27,11 @@ class MainWindow(Gtk.Window):
         self.database = None 
         self.session = None
 
+        self.start_rollcall_btn = Gtk.Button("Start")
+        self.end_rollcall_btn = Gtk.Button("End")
+        self.sign_in_btn = Gtk.Button("Sign In")
         self.session_tree_view = None
+        self.current_rollcall_course_label = Gtk.Label("No ongoing rollcall.")
 
         self.manage_page_notebook = None
         self.courses_tree_view = None
@@ -53,15 +57,17 @@ class MainWindow(Gtk.Window):
         header_row.add(header_box)
         listbox.add(header_row)
 
-        start_btn = Gtk.Button("Start")
-        end_btn = Gtk.Button("End")
-        end_btn.set_sensitive(False)
-        sign_in_btn = Gtk.Button("Sign In")
-        sign_in_btn.connect("clicked", self.sign_in)
+        self.start_rollcall_btn.connect("clicked", self.start_rollcall)
 
-        header_box.pack_start(start_btn, True, True, 0)
-        header_box.pack_start(end_btn, True, True, 0)
-        header_box.pack_start(sign_in_btn, True, True, 0)
+        self.end_rollcall_btn.connect("clicked", self.stop_rollcall)
+        self.end_rollcall_btn.set_sensitive(False)
+
+        self.sign_in_btn.connect("clicked", self.sign_in)
+        self.sign_in_btn.set_sensitive(False)
+
+        header_box.pack_start(self.start_rollcall_btn, True, True, 0)
+        header_box.pack_start(self.end_rollcall_btn, True, True, 0)
+        header_box.pack_start(self.sign_in_btn, True, True, 0)
         
         content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
         content_row = Gtk.ListBoxRow()
@@ -70,6 +76,13 @@ class MainWindow(Gtk.Window):
 
         self.session_tree_view = TreeView(Gtk.ListStore(str, str, bool), ["ID", "Name", "Arrived"])
         content_box.pack_start(self.session_tree_view, True, True, 0)
+
+        footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+        footer_row = Gtk.ListBoxRow()
+        footer_row.add(footer_box)
+        listbox.add(footer_row)
+    
+        footer_box.pack_start(self.current_rollcall_course_label, True, True, 0)
 
         self.notebook.append_page(listbox, Gtk.Label('Roll Call'))
         
@@ -164,6 +177,44 @@ class MainWindow(Gtk.Window):
         self.students_tree_view.bind(self.database.students)
 
 
+    def start_rollcall(self, widget):
+        form_dialog = FormDialog(self, title="Start a Roll Call", message="Which one is your class today?")
+        # Add a student tree view to the dialog.
+        courses_list_store = Gtk.ListStore(int, str, str)
+        courses_tree_view = TreeView(courses_list_store, ["ID", "Semester", "Name"], Gtk.SelectionMode.MULTIPLE)
+        form_dialog.add_tree_view(courses_tree_view, title="Courses")
+        courses_tree_view.bind(self.database.courses)
+        response = form_dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            selected_course_id = courses_tree_view.get_selected_items()[0]
+            selected_course = self.database.get_course(selected_course_id)
+            # Initiate a new rollcall session using the selected course.
+            self.session = Session(selected_course)
+            self.start_rollcall_btn.set_sensitive(False)
+            self.end_rollcall_btn.set_sensitive(True)
+            self.sign_in_btn.set_sensitive(True)
+            self.current_rollcall_course_label.set_text("Current roll call: ({}) {}".format(
+                selected_course.year, selected_course.name))
+            
+
+        form_dialog.destroy()
+
+    def stop_rollcall(self, widget):
+        confirm_dialog = ConfirmDialog(self, title="End Roll Call", message="End current roll call?")
+        response = confirm_dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            self.session.export()
+            self.session = None
+            self.start_rollcall_btn.set_sensitive(True)
+            self.end_rollcall_btn.set_sensitive(False)
+            self.sign_in_btn.set_sensitive(False)
+            self.current_rollcall_course_label.set_text("No ongoing rollcall.")
+
+        confirm_dialog.destroy()
+
+
     def sign_in(self, widget):
         face_imgs_paths = face.collect_face()
         print(face_imgs_paths)
@@ -210,12 +261,12 @@ class MainWindow(Gtk.Window):
     def create_course(self):
         form_dialog = FormDialog(self, title="Create New Course", message="Create New Course...")
         # Add year and name entries to the dialog.
-        year_entry = form_dialog.add_entry("Class Year")
+        year_entry = form_dialog.add_entry("Semester")
         name_entry = form_dialog.add_entry("Class Name")
         # Add a student tree view to the dialog.
         students_list_store = Gtk.ListStore(str, str)
         students_tree_view = TreeView(students_list_store, ["ID", "Name"], Gtk.SelectionMode.MULTIPLE)
-        form_dialog.add_tree_view(students_tree_view)
+        form_dialog.add_tree_view(students_tree_view, title="Students")
         students_tree_view.bind(self.database.students)
 
         response = form_dialog.run()
@@ -234,7 +285,7 @@ class MainWindow(Gtk.Window):
     def edit_course(self, course: Course):
         form_dialog = FormDialog(self, title="Edit Course", message="Edit Course...")
         # Add year and name entries to the dialog.
-        year_entry = form_dialog.add_entry("Class Year")
+        year_entry = form_dialog.add_entry("Semester")
         name_entry = form_dialog.add_entry("Class Name")
         year_entry.set_text(course.year)
         name_entry.set_text(course.name)
@@ -242,7 +293,7 @@ class MainWindow(Gtk.Window):
         # Add a student tree view to the dialog.
         students_list_store = Gtk.ListStore(str, str)
         students_tree_view = TreeView(students_list_store, ["ID", "Name"], Gtk.SelectionMode.MULTIPLE)
-        form_dialog.add_tree_view(students_tree_view)
+        form_dialog.add_tree_view(students_tree_view, title="Students")
         students_tree_view.bind(self.database.students)
 
         # Automatically selects (toggles) the students within this course.

@@ -8,6 +8,7 @@ from pyrollcall.course import Course
 from pyrollcall.student import Student
 
 class Database:
+    """ Implementation of a custom and lightweight database """
     def __init__(self, db_file_path: str):
         self.db_file_path = db_file_path
         self.courses = []
