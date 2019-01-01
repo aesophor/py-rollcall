@@ -1,5 +1,5 @@
 <div align="center">
-<h3>py-rollcall</h3>
+<h3>pyrollcall</h3>
 <img src="https://i.imgur.com/f4yYQB2.png">
 1071 Image Processing Semester Project
 </div>
