@@ -37,14 +37,14 @@ class Database:
             }, f)
 
 
-    def add_course(self, year: str, name: str):
+    def add_course(self, semester: str, name: str):
         """ Add a new course 
-        :param year: The year of the course
+        :param semester: The semester of the course
         :param name: The name of the course
         :return: The course we've just created
         """
         id = 0 if len(self.courses) == 0 else self.courses[len(self.courses) - 1].id + 1
-        course = Course(id, year, name)
+        course = Course(id, semester, name)
         self.courses.append(course)
         return course
 
@@ -72,7 +72,7 @@ class Database:
         :param name: The name of the student
         :return: The student we've just created
         """
-        student = Student(id, name)
+        student = Student(id.upper(), name)
         self.students.append(student)
         return student
 

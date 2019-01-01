@@ -3,9 +3,9 @@
 from pyrollcall.student import Student
 
 class Course:
-    def __init__(self, id: int, year: str, name: str):
+    def __init__(self, id: int, semester: str, name: str):
         self.id = id
-        self.year = year
+        self.semester = semester
         self.name = name
         self.students = []
 
@@ -32,4 +32,4 @@ class Course:
         return not(self == other)
 
     def __str__(self):
-        return "_".join([self.year, self.name])
+        return "_".join([self.semester, self.name])

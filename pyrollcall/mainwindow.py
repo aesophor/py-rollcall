@@ -98,19 +98,19 @@ class MainWindow(Gtk.Window):
         listbox.add(header_row)
 
         create_btn = Gtk.Button("Create")
-        create_btn.connect("clicked", self.on_create_btn_clicked)
+        create_btn.connect("clicked", self.create)
         
         edit_btn = Gtk.Button("Edit")
-        edit_btn.connect("clicked", self.on_edit_btn_clicked)
+        edit_btn.connect("clicked", self.edit)
         
         remove_btn = Gtk.Button("Remove")
-        remove_btn.connect("clicked", self.on_remove_btn_clicked)
+        remove_btn.connect("clicked", self.remove)
 
         take_photos_btn = Gtk.Button("Take Photos")
-        take_photos_btn.connect("clicked", self.on_take_photos_btn_clicked)
+        take_photos_btn.connect("clicked", self.take_photos)
 
         train_model_btn = Gtk.Button("Train Model")
-        train_model_btn.connect("clicked", self.on_train_model_btn_clicked)
+        train_model_btn.connect("clicked", self.train_models)
 
         header_box.pack_start(create_btn, True, True, 0)
         header_box.pack_start(edit_btn, True, True, 0)
@@ -136,7 +136,7 @@ class MainWindow(Gtk.Window):
         courses_row = Gtk.ListBoxRow()
         courses_row.add(courses_box)
         courses_listbox.add(courses_row) 
-        self.courses_tree_view = TreeView(Gtk.ListStore(int, str, str), ["id", "Year", "Name"])
+        self.courses_tree_view = TreeView(Gtk.ListStore(int, str, str), ["id", "semester", "Name"])
         if self.database is not None:
             self.courses_tree_view.update(self.database.courses)
         courses_box.pack_start(self.courses_tree_view, True, True, 0)
@@ -191,8 +191,7 @@ class MainWindow(Gtk.Window):
             self.end_rollcall_btn.set_sensitive(True)
             self.sign_in_btn.set_sensitive(True)
             self.update_session_tree_view()
-            self.current_rollcall_course_label.set_text("Current roll call: ({}) {}".format(
-                selected_course.year, selected_course.name))
+            self.current_rollcall_course_label.set_text("Current roll call: " + self.session.__str__())
 
         form_dialog.destroy()
 
@@ -218,22 +217,26 @@ class MainWindow(Gtk.Window):
 
         if response == Gtk.ResponseType.OK:
             img_path = face.collect_faces()[0]
-            student_id = face.recognize_face(self.database, img_path)[0]
+            students_ids = face.recognize_face(self.database, img_path)
 
-            if student_id == id_entry.get_text().upper():
-                self.session.mark_as_arrived(student_id)
-                self.update_session_tree_view()
+            if len(students_ids) > 0:
+                student_id = face.recognize_face(self.database, img_path)[0]
+
+                if student_id == id_entry.get_text().upper():
+                    self.session.mark_as_arrived(student_id)
+                    self.update_session_tree_view()
+                    self.current_rollcall_course_label.set_text("Current roll call: " + self.session.__str__())
 
         form_dialog.destroy()
 
 
-    def on_create_btn_clicked(self, widget):
+    def create(self, widget):
         if self.manage_page_notebook.get_current_page() == DataType.COURSE:
             self.create_course()
         elif self.manage_page_notebook.get_current_page() == DataType.STUDENT:
             self.create_student()
 
-    def on_edit_btn_clicked(self, widget):
+    def edit(self, widget):
         if self.manage_page_notebook.get_current_page() == DataType.COURSE:
             # The selection model of courses tree view is SINGLE,
             # so we'll try to get the first item in the list.
@@ -249,7 +252,7 @@ class MainWindow(Gtk.Window):
             selected_student = self.database.get_student(selected_student_id)
             self.edit_student(selected_student)
 
-    def on_remove_btn_clicked(self, widget):
+    def remove(self, widget):
         if self.manage_page_notebook.get_current_page() == DataType.COURSE:
             if len(self.courses_tree_view.get_selected_items()) == 0:
                 return
@@ -263,7 +266,7 @@ class MainWindow(Gtk.Window):
             selected_student = self.database.get_student(selected_student_id)
             self.remove_student(selected_student)
     
-    def on_take_photos_btn_clicked(self, widget):
+    def take_photos(self, widget):
         selected_students_ids = self.students_tree_view.get_selected_items()
 
         if len(selected_students_ids) > 0:
@@ -282,7 +285,7 @@ class MainWindow(Gtk.Window):
 
             form_dialog.destroy()
 
-    def on_train_model_btn_clicked(self, widget):
+    def train_models(self, widget):
         confirm_dialog = ConfirmDialog(self, title="Training Model", message="This may take a while, are you sure?")
         response = confirm_dialog.run()
 
@@ -296,8 +299,8 @@ class MainWindow(Gtk.Window):
 
     def create_course(self):
         form_dialog = FormDialog(self, title="Create New Course", message="Create New Course...")
-        # Add year and name entries to the dialog.
-        year_entry = form_dialog.add_entry("Semester  ")
+        # Add semester and name entries to the dialog.
+        semester_entry = form_dialog.add_entry("Semester  ")
         name_entry = form_dialog.add_entry("Class Name")
         # Add a student tree view to the dialog.
         students_list_store = Gtk.ListStore(str, str, bool)
@@ -308,7 +311,7 @@ class MainWindow(Gtk.Window):
         response = form_dialog.run()
 
         if response == Gtk.ResponseType.OK:
-            c = self.database.add_course(year_entry.get_text(), name_entry.get_text())
+            c = self.database.add_course(semester_entry.get_text(), name_entry.get_text())
             selected_items = students_tree_view.get_selected_items()
             for student_id in selected_items:
                 s = self.database.get_student(student_id)
@@ -320,10 +323,10 @@ class MainWindow(Gtk.Window):
 
     def edit_course(self, course: Course):
         form_dialog = FormDialog(self, title="Edit Course", message="Edit Course...")
-        # Add year and name entries to the dialog.
-        year_entry = form_dialog.add_entry("Semester  ")
+        # Add semester and name entries to the dialog.
+        semester_entry = form_dialog.add_entry("Semester  ")
         name_entry = form_dialog.add_entry("Class Name")
-        year_entry.set_text(course.year)
+        semester_entry.set_text(course.semester)
         name_entry.set_text(course.name)
 
         # Add a student tree view to the dialog.
@@ -348,7 +351,7 @@ class MainWindow(Gtk.Window):
         response = form_dialog.run()
 
         if response == Gtk.ResponseType.OK:
-            course.year = year_entry.get_text()
+            course.semester = semester_entry.get_text()
             course.name = name_entry.get_text()
             selected_items = students_tree_view.get_selected_items()
 
@@ -363,7 +366,7 @@ class MainWindow(Gtk.Window):
 
     def remove_course(self, course: Course):
         confirm_dialog = ConfirmDialog(self, title="Remove Course", message="Remove {} {}?".format(
-            course.year, course.name))
+            course.semester, course.name))
         response = confirm_dialog.run()
 
         if response == Gtk.ResponseType.OK:
