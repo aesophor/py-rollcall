@@ -20,8 +20,8 @@ class MainWindow(Gtk.Window):
 
         self.database = None 
         self.session = None
-        self.session_list_store = Gtk.ListStore(str, str, bool)
-        
+        self.session_tree_view = None
+
         # Create a notebook.
         self.notebook = Gtk.Notebook()
         self.add(self.notebook)
@@ -50,19 +50,13 @@ class MainWindow(Gtk.Window):
         header_box.pack_start(sign_in_button, True, True, 0)
         listbox.add(header_row)
     
-        self.session_list_store = Gtk.ListStore(str, str, bool)
-        session_tree_view = Gtk.TreeView(self.session_list_store)
-
-        for i, col_title in enumerate(["Student ID", "Name", "Arrived"]):
-            renderer = Gtk.CellRendererText()
-            column = Gtk.TreeViewColumn(col_title, renderer, text=i)
-            column.set_sort_column_id(i)
-            session_tree_view.append_column(column)
-
         content_row = Gtk.ListBoxRow()
         content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
         content_row.add(content_box)
-        content_box.pack_start(session_tree_view, True, True, 0)
+
+        self.session_tree_view = TreeView(Gtk.ListStore(str, str, bool), ["ID", "Name", "Arrived"])
+        content_box.pack_start(self.session_tree_view, True, True, 0)
+
         listbox.add(content_row)
         self.notebook.append_page(listbox, Gtk.Label('Roll Call'))
         
@@ -99,40 +93,56 @@ class MainWindow(Gtk.Window):
         if self.session is None:
             return
 
-        self.session_list_store.clear()
+        self.session_tree_view.list_store.clear()
         for student, arrived in self.session.students_arrival.items():
-            self.session_list_store.append([student.id, student.name, arrived])
+            self.session_tree_view.list_store.append([student.id, student.name, arrived])
+
 
     def connect_db(self, database):
         self.database = database
 
-        c = Course(1071, 'Image Processing')
-        s1 = Student('U10516045', 'Marco Wang')
-        s2 = Student('U10516046', 'Tsai')
-        s3 = Student('U10516001', 'John')
-        c.add_student([s1, s2, s3])
+        c1 = self.database.add_course(1071, 'Image Processing')
+        s1 = self.database.add_student('U10516045', 'Marco Wang')
+        s2 = self.database.add_student('U10516046', 'Tsai')
+        s3 = self.database.add_student('U10516001', 'John')
+        c1.add_students([s1, s2, s3])
 
-        self.database.add_course(c)
-
-        self.session = Session(c)
+        self.session = Session(c1)
         self.update_session_tree_view()
 
 
     def create_course(self, widget):
         form_dialog = FormDialog(self, title="Create New Course", message="Create New Course...")
+        # Add year and name entries to the dialog.
         year_entry = form_dialog.add_entry("Class Year")
         name_entry = form_dialog.add_entry("Class Name")
+        # Add a student tree view to the dialog.
+        students_list_store = Gtk.ListStore(str, str)
+        students_tree_view = form_dialog.add_tree_view(TreeView(students_list_store, ["ID", "Name"]))
+        students_tree_view.bind(self.database.students)
+
         response = form_dialog.run()
 
         if response == Gtk.ResponseType.OK:
-            c = Course(year_entry.get_text(), name_entry.get_text())
-            self.database.add_course(c)
+            c = self.database.add_course(year_entry.get_text(), name_entry.get_text())
+            selected_items = students_tree_view.get_selected_items()
+            for student_id in selected_items:
+                s = self.database.get_student(student_id)
+                c.add_student(s)
 
         form_dialog.destroy()
 
 
     def create_student(self, widget):
-        pass
+        form_dialog = FormDialog(self, title="Create New Course", message="Create New Course...")
+        id_entry = form_dialog.add_entry("Student ID")
+        name_entry = form_dialog.add_entry("Student Name")
+        response = form_dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            self.database.add_student(id_entry.get_text(), name_entry.get_text())
+
+        form_dialog.destroy()
 
 
     def train_model(self, widget):
@@ -150,6 +160,10 @@ class MainWindow(Gtk.Window):
         self.show_all()
         Gtk.main()
 
+
+
+
+""" Move the bitches below to another motherfucking module """
 
 class ConfirmDialog(Gtk.Dialog):
     """ Ask user to confirm the specified message """
@@ -182,10 +196,10 @@ class FormDialog(ConfirmDialog):
         """ An entry in Gtk is like a text input area
         :param title: Displays a label on the LHS of the entry
         :param text: The default text in the entry
-        :return: the reference to the entry we just created
+        :return: The reference to the entry we just created
         """
         row = Gtk.ListBoxRow()
-        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=30)
         row.add(box)
 
         label = Gtk.Label(title)
@@ -197,3 +211,66 @@ class FormDialog(ConfirmDialog):
         self.listbox.add(row)
         self.show_all()
         return entry
+
+    def add_tree_view(self, tree_view, title=""):
+        """ Add a TreeView 
+        :param tree_view: TreeView to add. Must be of pyrollcall's custom treeview type
+        :param title: Displays a label on the LHS of the tree view
+        :return: The reference to the tree view we just created
+        """
+        row = Gtk.ListBoxRow()
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=30)
+        row.add(box)
+
+        label = Gtk.Label(title)
+
+        box.pack_start(label, True, True, 0)
+        box.pack_start(tree_view, True, True, 0)
+        self.listbox.add(row)
+        self.show_all()
+        return tree_view
+
+
+
+class TreeView(Gtk.TreeView):
+    """ Wraps the TreeStore inside and takes care of user selection """
+    def __init__(self, list_store, column_titles: list):
+        Gtk.TreeView.__init__(self, list_store)
+        self.list_store = list_store
+        self.selected_items = [] # Primary keys
+
+        # Populate TreeView rows.
+        for i, title in enumerate(column_titles):
+            renderer = Gtk.CellRendererText()
+            column = Gtk.TreeViewColumn(title, renderer, text=i)
+            column.set_sort_column_id(i)
+            self.append_column(column)
+
+        # Handle row selection.
+        selection = self.get_selection()
+        selection.set_mode(Gtk.SelectionMode.MULTIPLE)
+        selection.connect("changed", self.on_selection_changed)
+
+    def on_selection_changed(self, selection):
+        """ The event handler on selection changed """
+        self.selected_items.clear()
+
+        model, rows = selection.get_selected_rows()
+        for row in rows:
+            tree_iter = model.get_iter(row)
+            primary_key = model.get_value(tree_iter, 0)
+            self.selected_items.append(primary_key)
+
+    def get_selected_items(self):
+        return self.selected_items
+
+    def bind(self, objects):
+        """ Bind this tree view with a list of objects, e.g., all students in db
+        Then all fields of these objects will be displayed in the tree view.
+        """
+        self.list_store.clear()
+        for o in objects:
+            obj_fields = []
+            for key, value in vars(o).items():
+                obj_fields.append(value)
+            self.list_store.append(obj_fields)

@@ -4,6 +4,9 @@ from imutils import paths
 import face_recognition
 import pickle
 
+from pyrollcall.course import Course
+from pyrollcall.student import Student
+
 class Database:
     def __init__(self, db_file_path: str):
         self.db_file_path = db_file_path
@@ -27,11 +30,16 @@ class Database:
             }, f)
 
 
-    def add_course(self, course):
+    def add_course(self, year: str, name: str):
         """ Add a new course 
-        :param course: the course to add
+        :param year: The year of the course
+        :param name: The name of the course
+        :return: The course we've just created
         """
+        id = 0 if len(self.courses) == 0 else self.courses[len(self.courses) - 1]
+        course = Course(id, year, name)
         self.courses.append(course)
+        return course
 
     def get_course(self, year: str, name: str):
         """ Get an existing course
@@ -54,11 +62,15 @@ class Database:
             elf.courses.remove(course)
 
 
-    def add_student(self, student):
+    def add_student(self, id: str, name: str):
         """ Add a new student
-        :param student: the student to add
+        :param id: The id of the student
+        :param name: The name of the student
+        :return: The student we've just created
         """
+        student = Student(id, name)
         self.students.append(student)
+        return student
 
     def get_student(self, id: str):
         """ Get an existing student

@@ -3,23 +3,29 @@
 from pyrollcall.student import Student
 
 class Course:
-    def __init__(self, year: str, name: str):
+    def __init__(self, id: int, year: str, name: str):
+        self.id = id
         self.year = year
         self.name = name
         self.students = []
 
-    def add_student(self, students: list):
+    def add_students(self, students: list):
         self.students += students
 
+    def add_student(self, s: Student):
+        if s not in self.students:
+            self.students.append(s)
+
     def remove_student(self, s: Student):
-        self.students.remove(s)
+        if s in self.students:
+            self.students.remove(s)
 
     def __hash__(self):
-        return hash((self.year, self.name))
+        return hash(self.id)
 
     def __eq__(self, other):
         if isinstance(other, Course):
-            return (self.year == other.year) and (self.name == other.name)
+            return self.id == other.id
         return False
 
     def __ne__(self, other):
