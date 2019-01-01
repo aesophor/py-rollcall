@@ -20,12 +20,16 @@ class MainWindow(Gtk.Window):
 
         self.database = None 
         self.session = None
-        self.session_tree_view = None
 
-        # Create a notebook.
+        self.session_tree_view = None
+        self.courses_tree_view = None
+        self.students_tree_view = None
+
+        # Create the primary notebook (tabbed pane).
         self.notebook = Gtk.Notebook()
         self.add(self.notebook)
 
+        # Initialize pages (tabs) in the primary notebook.
         self.init_rollcall_page()
         self.init_edit_page()
         self.init_about_page()
@@ -36,8 +40,8 @@ class MainWindow(Gtk.Window):
         listbox = Gtk.ListBox(margin=5)
         listbox.set_selection_mode(Gtk.SelectionMode.NONE)
 
-        header_row = Gtk.ListBoxRow()
         header_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+        header_row = Gtk.ListBoxRow()
         header_row.add(header_box)
         listbox.add(header_row)
 
@@ -50,8 +54,8 @@ class MainWindow(Gtk.Window):
         header_box.pack_start(end_button, True, True, 0)
         header_box.pack_start(sign_in_button, True, True, 0)
         
-        content_row = Gtk.ListBoxRow()
         content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+        content_row = Gtk.ListBoxRow()
         content_row.add(content_box)
         listbox.add(content_row)
 
@@ -66,8 +70,8 @@ class MainWindow(Gtk.Window):
         listbox = Gtk.ListBox(margin=5)
         listbox.set_selection_mode(Gtk.SelectionMode.NONE)
 
-        header_row = Gtk.ListBoxRow()
         header_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+        header_row = Gtk.ListBoxRow()
         header_row.add(header_box)
         listbox.add(header_row)
 
@@ -85,21 +89,41 @@ class MainWindow(Gtk.Window):
         header_box.pack_start(train_model_button, True, True, 0)
 
 
-        content_row = Gtk.ListBoxRow()
         content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+        content_row = Gtk.ListBoxRow()
         content_row.add(content_box)
         listbox.add(content_row)
 
         # Display all courses and students in the database in two different tabs resp.
         manage_page_notebook = Gtk.Notebook()
-        courses_page = Gtk.Box(margin=20)
-        courses_page.set_border_width(10)
-        students_page = Gtk.Box(margin=20)
-        students_page.set_border_width(10)
-        manage_page_notebook.append_page(courses_page, Gtk.Label('All Courses'))
-        manage_page_notebook.append_page(students_page, Gtk.Label('All Students'))
+        courses_listbox = Gtk.ListBox(margin=5)
+        courses_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        students_listbox = Gtk.ListBox(margin=5)
+        students_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
 
-        content_box.pack_start(manage_page_notebook, True, True, 0)
+        # Courses page.
+        courses_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+        courses_row = Gtk.ListBoxRow()
+        courses_row.add(courses_box)
+        courses_listbox.add(courses_row) 
+        self.courses_tree_view = TreeView(Gtk.ListStore(int, str, str), ["id", "Year", "Name"])
+        if self.database is not None:
+            self.courses_tree_view.bind(self.database.courses)
+        courses_box.pack_start(self.courses_tree_view, True, True, 0)
+
+        # Students page.
+        students_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+        students_row = Gtk.ListBoxRow()
+        students_row.add(students_box)
+        students_listbox.add(students_row) 
+        self.students_tree_view = TreeView(Gtk.ListStore(str, str), ["id", "Name"])
+        if self.database is not None:
+            self.students_tree_view.bind(self.database.students)
+        students_box.pack_start(self.students_tree_view, True, True, 0)
+
+        manage_page_notebook.append_page(courses_listbox, Gtk.Label('All Courses'))
+        manage_page_notebook.append_page(students_listbox, Gtk.Label('All Students'))
+        content_box.pack_start(manage_page_notebook, True, True, 0)        
 
         self.notebook.append_page(listbox, Gtk.Label('Manage Courses/Students'))
 
@@ -124,14 +148,16 @@ class MainWindow(Gtk.Window):
     def connect_db(self, database):
         self.database = database
 
+        """
         c1 = self.database.add_course(1071, 'Image Processing')
         s1 = self.database.add_student('U10516045', 'Marco Wang')
         s2 = self.database.add_student('U10516046', 'Tsai')
         s3 = self.database.add_student('U10516001', 'John')
         c1.add_students([s1, s2, s3])
+        """
 
-        self.session = Session(c1)
-        self.update_session_tree_view()
+       # self.session = Session(c1)
+       # self.update_session_tree_view()
 
 
     def create_course(self, widget):
@@ -152,6 +178,7 @@ class MainWindow(Gtk.Window):
             for student_id in selected_items:
                 s = self.database.get_student(student_id)
                 c.add_student(s)
+            self.courses_tree_view.bind(self.database.courses)
 
         form_dialog.destroy()
 
@@ -164,6 +191,7 @@ class MainWindow(Gtk.Window):
 
         if response == Gtk.ResponseType.OK:
             self.database.add_student(id_entry.get_text(), name_entry.get_text())
+            self.students_tree_view.bind(self.database.students)
 
         form_dialog.destroy()
 
@@ -260,6 +288,7 @@ class TreeView(Gtk.TreeView):
     def __init__(self, list_store, column_titles: list):
         Gtk.TreeView.__init__(self, list_store)
         self.list_store = list_store
+        self.column_titles = column_titles
         self.selected_items = [] # Primary keys
 
         # Populate TreeView rows.
@@ -290,10 +319,18 @@ class TreeView(Gtk.TreeView):
     def bind(self, objects):
         """ Bind this tree view with a list of objects, e.g., all students in db
         Then all fields of these objects will be displayed in the tree view.
+        However, if the data gets updated, we'll need to call this method again. (bad design)
         """
+        if objects is None:
+            return
+
         self.list_store.clear()
         for o in objects:
             obj_fields = []
-            for key, value in vars(o).items():
+            for i, (key, value) in enumerate(vars(o).items()):
+                if i >= len(self.column_titles):
+                    break
                 obj_fields.append(value)
+
+            print(obj_fields)
             self.list_store.append(obj_fields)
