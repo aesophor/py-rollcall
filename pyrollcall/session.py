@@ -11,7 +11,7 @@ class Session:
         for s in course.students:
             self.students_arrival[s] = False
 
-    def mark_arrived(self, student_id: str):
+    def mark_as_arrived(self, student_id: str):
         """ Mark the specified student as arived
         :param student: The student who has just arrived
         """

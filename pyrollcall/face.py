@@ -23,7 +23,9 @@ def collect_faces(student=None, img_count=1, capture_key=0x20):
     :return: A list of paths to the photos taken
     """
     current_img_no = 0
+    taken_photo_paths = []
     photo_dir = "photos/" if student is None else student.photo_dir
+    photo_filename = utils.get_datetimestamp().replace('/', '_') if student is None else student.name
     webcam_title = "Face Collector" if student is None else "Face Collector ({})".format(student.name)
 
     cv2.namedWindow(webcam_title)
@@ -41,7 +43,11 @@ def collect_faces(student=None, img_count=1, capture_key=0x20):
 
         if key == capture_key:
             utils.mkdir(photo_dir)
-            cv2.imwrite(photo_dir + str(current_img_no) + '.png', img)
+            img_path = photo_dir + photo_filename + '_' + str(current_img_no) + '.png'
+
+            taken_photo_paths.append(img_path)
+            cv2.imwrite(img_path, img)
+
             current_img_no += 1
             if current_img_no >= img_count:
                 break
@@ -50,7 +56,7 @@ def collect_faces(student=None, img_count=1, capture_key=0x20):
 
     cv2.destroyWindow(webcam_title)
     del cam
-    return list(paths.list_images(photo_dir))
+    return taken_photo_paths
 
 
 def encode_faces(db, faces_dir: str):
@@ -138,6 +144,6 @@ def recognize_face(db, img_path: str):
             0.75, (0, 255, 0), 2)
 
     # Show the output image
-    cv2.imshow("Image", image)
-    cv2.waitKey(0)
+    #cv2.imshow("Image", image)
+    #cv2.waitKey(0)
     return names

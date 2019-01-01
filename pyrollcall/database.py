@@ -21,13 +21,15 @@ class Database:
             data = pickle.load(f)
             self.courses = data["courses"]
             self.students = data["students"]
+            self.face_encodings = data["face_encodings"]
 
     def dump(self):
         """ Pickle courses and students to the file """
         with open(self.db_file_path, 'wb') as f:
             data = pickle.dump({
                 "courses": self.courses,
-                "students": self.students
+                "students": self.students,
+                "face_encodings": self.face_encodings
             }, f)
 
 
