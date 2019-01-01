@@ -4,11 +4,17 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+from enum import IntEnum
 from pyrollcall.database import Database
 from pyrollcall.course import Course
 from pyrollcall.student import Student
 from pyrollcall.session import Session
 import pyrollcall.face as face
+
+
+class DataType(IntEnum):
+    COURSE = 0
+    STUDENT = 1
 
 
 class MainWindow(Gtk.Window):
@@ -22,6 +28,8 @@ class MainWindow(Gtk.Window):
         self.session = None
 
         self.session_tree_view = None
+
+        self.manage_page_notebook = None
         self.courses_tree_view = None
         self.students_tree_view = None
 
@@ -45,15 +53,15 @@ class MainWindow(Gtk.Window):
         header_row.add(header_box)
         listbox.add(header_row)
 
-        start_button = Gtk.Button("Start")
-        end_button = Gtk.Button("End")
-        end_button.set_sensitive(False)
-        sign_in_button = Gtk.Button("Sign In")
-        sign_in_button.connect("clicked", self.sign_in)
+        start_btn = Gtk.Button("Start")
+        end_btn = Gtk.Button("End")
+        end_btn.set_sensitive(False)
+        sign_in_btn = Gtk.Button("Sign In")
+        sign_in_btn.connect("clicked", self.sign_in)
 
-        header_box.pack_start(start_button, True, True, 0)
-        header_box.pack_start(end_button, True, True, 0)
-        header_box.pack_start(sign_in_button, True, True, 0)
+        header_box.pack_start(start_btn, True, True, 0)
+        header_box.pack_start(end_btn, True, True, 0)
+        header_box.pack_start(sign_in_btn, True, True, 0)
         
         content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
         content_row = Gtk.ListBoxRow()
@@ -76,18 +84,22 @@ class MainWindow(Gtk.Window):
         header_row.add(header_box)
         listbox.add(header_row)
 
-        create_course_button = Gtk.Button("New Course")
-        create_course_button.connect("clicked", self.create_course)
+        create_btn = Gtk.Button("Create")
+        create_btn.connect("clicked", self.on_create_btn_clicked)
         
-        create_student_button = Gtk.Button("New Student")
-        create_student_button.connect("clicked", self.create_student)
+        edit_btn = Gtk.Button("Edit")
+        edit_btn.connect("clicked", self.on_edit_btn_clicked)
+        
+        remove_btn = Gtk.Button("Remove")
+        #remove_btn.connect("clicked", self.on_remove_btn_clicked)
 
-        train_model_button = Gtk.Button("Train Model")
-        train_model_button.connect("clicked", self.train_model)
+        train_model_btn = Gtk.Button("Train Model")
+        train_model_btn.connect("clicked", self.train_model)
 
-        header_box.pack_start(create_course_button, True, True, 0)
-        header_box.pack_start(create_student_button, True, True, 0)
-        header_box.pack_start(train_model_button, True, True, 0)
+        header_box.pack_start(create_btn, True, True, 0)
+        header_box.pack_start(edit_btn, True, True, 0)
+        header_box.pack_start(remove_btn, True, True, 0)
+        header_box.pack_start(train_model_btn, True, True, 0)
 
 
         content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
@@ -96,7 +108,7 @@ class MainWindow(Gtk.Window):
         listbox.add(content_row)
 
         # Display all courses and students in the database in two different tabs resp.
-        manage_page_notebook = Gtk.Notebook()
+        self.manage_page_notebook = Gtk.Notebook()
         courses_listbox = Gtk.ListBox(margin=5)
         courses_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         students_listbox = Gtk.ListBox(margin=5)
@@ -122,9 +134,9 @@ class MainWindow(Gtk.Window):
             self.students_tree_view.bind(self.database.students)
         students_box.pack_start(self.students_tree_view, True, True, 0)
 
-        manage_page_notebook.append_page(courses_listbox, Gtk.Label('All Courses'))
-        manage_page_notebook.append_page(students_listbox, Gtk.Label('All Students'))
-        content_box.pack_start(manage_page_notebook, True, True, 0)        
+        self.manage_page_notebook.append_page(courses_listbox, Gtk.Label('All Courses'))
+        self.manage_page_notebook.append_page(students_listbox, Gtk.Label('All Students'))
+        content_box.pack_start(self.manage_page_notebook, True, True, 0)        
 
         self.notebook.append_page(listbox, Gtk.Label('Manage Courses/Students'))
 
@@ -165,7 +177,40 @@ class MainWindow(Gtk.Window):
         face.collect_face()
 
 
-    def create_course(self, widget):
+    def on_create_btn_clicked(self, widget):
+        print(self.manage_page_notebook.get_current_page())
+        if self.manage_page_notebook.get_current_page() == DataType.COURSE:
+            self.create_course()
+        elif self.manage_page_notebook.get_current_page() == DataType.STUDENT:
+            self.create_student()
+        else:
+            pass
+
+
+    def on_edit_btn_clicked(self, widget):
+        if self.manage_page_notebook.get_current_page() == DataType.COURSE:
+            #self.edit_course()
+            pass
+        elif self.manage_page_notebook.get_current_page() == DataType.STUDENT:
+            #self.edit_student()
+            pass
+        else:
+            pass
+
+
+    def on_remove_btn_clicked(self, widget):
+        if self.manage_page_notebook.get_current_page() == DataType.COURSE:
+            #self.edit_course()
+            pass
+        elif self.manage_page_notebook.get_current_page() == DataType.STUDENT:
+            #self.edit_student()
+            pass
+        else:
+            pass
+
+
+
+    def create_course(self):
         form_dialog = FormDialog(self, title="Create New Course", message="Create New Course...")
         # Add year and name entries to the dialog.
         year_entry = form_dialog.add_entry("Class Year")
@@ -188,8 +233,8 @@ class MainWindow(Gtk.Window):
         form_dialog.destroy()
 
 
-    def create_student(self, widget):
-        form_dialog = FormDialog(self, title="Create New Course", message="Create New Course...")
+    def create_student(self):
+        form_dialog = FormDialog(self, title="Create New Student", message="Create New Student...")
         id_entry = form_dialog.add_entry("Student ID")
         name_entry = form_dialog.add_entry("Student Name")
         response = form_dialog.run()
