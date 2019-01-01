@@ -39,6 +39,7 @@ class MainWindow(Gtk.Window):
         header_row = Gtk.ListBoxRow()
         header_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
         header_row.add(header_box)
+        listbox.add(header_row)
 
         start_button = Gtk.Button("Start")
         end_button = Gtk.Button("End")
@@ -48,37 +49,59 @@ class MainWindow(Gtk.Window):
         header_box.pack_start(start_button, True, True, 0)
         header_box.pack_start(end_button, True, True, 0)
         header_box.pack_start(sign_in_button, True, True, 0)
-        listbox.add(header_row)
-    
+        
         content_row = Gtk.ListBoxRow()
         content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
         content_row.add(content_box)
+        listbox.add(content_row)
 
         self.session_tree_view = TreeView(Gtk.ListStore(str, str, bool), ["ID", "Name", "Arrived"])
         content_box.pack_start(self.session_tree_view, True, True, 0)
 
-        listbox.add(content_row)
         self.notebook.append_page(listbox, Gtk.Label('Roll Call'))
         
 
     def init_edit_page(self):
         # Create the edit page.
-        self.edit_page = Gtk.Box(margin=20)
-        self.edit_page.set_border_width(10)
+        listbox = Gtk.ListBox(margin=5)
+        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+
+        header_row = Gtk.ListBoxRow()
+        header_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+        header_row.add(header_box)
+        listbox.add(header_row)
 
         create_course_button = Gtk.Button("New Course")
         create_course_button.connect("clicked", self.create_course)
-        self.edit_page.add(create_course_button)
-
+        
         create_student_button = Gtk.Button("New Student")
         create_student_button.connect("clicked", self.create_student)
-        self.edit_page.add(create_student_button)
 
         train_model_button = Gtk.Button("Train Model")
         train_model_button.connect("clicked", self.train_model)
-        self.edit_page.add(train_model_button)
 
-        self.notebook.append_page(self.edit_page, Gtk.Label('Edit Courses/Students'))
+        header_box.pack_start(create_course_button, True, True, 0)
+        header_box.pack_start(create_student_button, True, True, 0)
+        header_box.pack_start(train_model_button, True, True, 0)
+
+
+        content_row = Gtk.ListBoxRow()
+        content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+        content_row.add(content_box)
+        listbox.add(content_row)
+
+        # Display all courses and students in the database in two different tabs resp.
+        manage_page_notebook = Gtk.Notebook()
+        courses_page = Gtk.Box(margin=20)
+        courses_page.set_border_width(10)
+        students_page = Gtk.Box(margin=20)
+        students_page.set_border_width(10)
+        manage_page_notebook.append_page(courses_page, Gtk.Label('All Courses'))
+        manage_page_notebook.append_page(students_page, Gtk.Label('All Students'))
+
+        content_box.pack_start(manage_page_notebook, True, True, 0)
+
+        self.notebook.append_page(listbox, Gtk.Label('Manage Courses/Students'))
 
 
     def init_about_page(self):
