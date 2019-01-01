@@ -31,7 +31,7 @@ $ cd pyrollcall && python pyrollcall.py
 ```
 
 ## Features
-* Manage (add/edit/remove) your own courses and students, each course may contains a list of students. This program can be reused throughout different classes you teach
+* Manage (add/edit/remove) your own courses and students; each course may contains a list of students. This program can be reused throughout different classes you teach
 * Take photos of  each student and train the program so that it can recognize faces correctly
 * Start a roll call session, let student sign in to the class by taking photos (a webcam is needed)
 * Information about student arrival will be displayed in the window on-the-fly (e.g., arrival rate, who has and has not arrived)
