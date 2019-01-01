@@ -541,7 +541,7 @@ class TreeView(Gtk.TreeView):
         self.list_store.clear()
         for o in objects:
             obj_fields = []
-            for i, (key, value) in enumerate(vars(o).items()):
+            for i, (key, value) in enumerate(o.dict.items()):
                 if i >= len(self.column_titles):
                     break
                 obj_fields.append(value)

@@ -26,7 +26,7 @@ class Student:
         return not(self == other)
 
     @property
-    def __dict__(self):
+    def dict(self):
         return {
             'id': self.id,
             'name': self.name,

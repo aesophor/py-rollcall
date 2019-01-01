@@ -36,7 +36,7 @@ class Course:
         return not(self == other)
 
     @property
-    def __dict__(self):
+    def dict(self):
         return {
             'id': self.id,
             'semester': self.semester,
