@@ -216,8 +216,17 @@ class MainWindow(Gtk.Window):
 
 
     def sign_in(self, widget):
-        img_path = face.collect_faces()[0]
-        face.recognize_face(img_path)
+        form_dialog = FormDialog(self, title="Sign in", message="Please enter your student ID")
+        id_entry = form_dialog.add_entry("Student ID")
+        response = form_dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            img_path = face.collect_faces()[0]
+            student_id = face.recognize_face(self.database, img_path)[0]
+            if student_id == id_entry.get_text():
+                self.session.mark_arrived(student_id)
+
+        form_dialog.destroy()
 
 
     def on_create_btn_clicked(self, widget):

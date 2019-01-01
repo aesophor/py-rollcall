@@ -23,7 +23,7 @@ def collect_faces(student=None, img_count=1, capture_key=0x20):
     :return: A list of paths to the photos taken
     """
     current_img_no = 0
-    photo_dir = "faces/temp/" if student is None else student.photo_dir
+    photo_dir = "photos/" if student is None else student.photo_dir
     webcam_title = "Face Collector" if student is None else "Face Collector ({})".format(student.name)
 
     cv2.namedWindow(webcam_title)
@@ -63,7 +63,7 @@ def encode_faces(db, faces_dir: str):
         # Extract the person name from the image path.
         print("[INFO] processing image {} {current}/{total}".format(
             image_path, current=i + 1, total=len(image_paths)))
-        student_name = image_path.split(os.path.sep)[-2].split('_')[1] # get directory name
+        student_name = image_path.split(os.path.sep)[-2].split('_')[0] # get directory name
 
         # Load the input image and convert it from BGR (OpenCV ordering)
         # to dlib ordering (RGB).

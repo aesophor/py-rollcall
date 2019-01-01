@@ -1,6 +1,7 @@
 pyrollcall/__pycache__/*
 faces/*
 logs/*
+photos/*
 scripts/*
 test/*
 rollcall.db
