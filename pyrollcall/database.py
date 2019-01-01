@@ -36,30 +36,27 @@ class Database:
         :param name: The name of the course
         :return: The course we've just created
         """
-        id = 0 if len(self.courses) == 0 else self.courses[len(self.courses) - 1]
+        id = 0 if len(self.courses) == 0 else self.courses[len(self.courses) - 1].id + 1
         course = Course(id, year, name)
         self.courses.append(course)
         return course
 
-    def get_course(self, year: str, name: str):
+    def get_course(self, id: int):
         """ Get an existing course
-        :param year: The year of the course
-        :param name: The name of the course
+        :param id: The id of the course
         :return: Course if found, None if not found
         """
         for c in self.courses:
-            if c.year == year and c.name == name:
+            if c.id == id:
                 return c
         return None
 
-    def remove_course(self, year: str, name: str):
+    def remove_course(self, course):
         """ Remove the specified course
-        :param year: The year of the course
-        :param name: The name of the course
+        :param course: The course to remove
         """
-        course = self.get_course(year, name)
-        if course is not None:
-            elf.courses.remove(course)
+        if course in self.courses:
+            self.courses.remove(course)
 
 
     def add_student(self, id: str, name: str):
@@ -82,10 +79,13 @@ class Database:
                 return s
         return None
 
-    def remove_student(self, id: str):
-        """ Remove the specified student
-        :param id: The id of the student
+    def remove_student(self, student):
+        """ Remove the specified student. It also removes all occurrences
+        of this student from all existing courses.
+        :param student: The student to remove
         """
-        student = self.get_student(id)
-        if student is not None:
+        if student in self.students:
+            for course in self.courses:
+                if student in course.students:
+                    course.students.remove(student)
             self.students.remove(student)

@@ -91,7 +91,7 @@ class MainWindow(Gtk.Window):
         edit_btn.connect("clicked", self.on_edit_btn_clicked)
         
         remove_btn = Gtk.Button("Remove")
-        #remove_btn.connect("clicked", self.on_remove_btn_clicked)
+        remove_btn.connect("clicked", self.on_remove_btn_clicked)
 
         train_model_btn = Gtk.Button("Train Model")
         train_model_btn.connect("clicked", self.train_model)
@@ -168,6 +168,8 @@ class MainWindow(Gtk.Window):
         s3 = self.database.add_student('U10516001', 'John')
         c1.add_students([s1, s2, s3])
         """
+        self.courses_tree_view.bind(self.database.courses)
+        self.students_tree_view.bind(self.database.students)
 
        # self.session = Session(c1)
        # self.update_session_tree_view()
@@ -178,7 +180,6 @@ class MainWindow(Gtk.Window):
 
 
     def on_create_btn_clicked(self, widget):
-        print(self.manage_page_notebook.get_current_page())
         if self.manage_page_notebook.get_current_page() == DataType.COURSE:
             self.create_course()
         elif self.manage_page_notebook.get_current_page() == DataType.STUDENT:
@@ -189,22 +190,28 @@ class MainWindow(Gtk.Window):
 
     def on_edit_btn_clicked(self, widget):
         if self.manage_page_notebook.get_current_page() == DataType.COURSE:
-            #self.edit_course()
-            pass
+            # The selection model of courses tree view is SINGLE,
+            # so we'll try to get the first item in the list.
+            selected_course_id = self.courses_tree_view.get_selected_items()[0]
+            selected_course = self.database.get_course(selected_course_id)
+            self.edit_course(selected_course)
         elif self.manage_page_notebook.get_current_page() == DataType.STUDENT:
-            #self.edit_student()
-            pass
+            selected_student_id = self.students_tree_view.get_selected_items()[0]
+            selected_student = self.database.get_student(selected_student_id)
+            self.edit_student(selected_student)
         else:
             pass
 
 
     def on_remove_btn_clicked(self, widget):
         if self.manage_page_notebook.get_current_page() == DataType.COURSE:
-            #self.edit_course()
-            pass
+            selected_course_id = self.courses_tree_view.get_selected_items()[0]
+            selected_course = self.database.get_course(selected_course_id)
+            self.remove_course(selected_course)
         elif self.manage_page_notebook.get_current_page() == DataType.STUDENT:
-            #self.edit_student()
-            pass
+            selected_student_id = self.students_tree_view.get_selected_items()[0]
+            selected_student = self.database.get_student(selected_student_id)
+            self.remove_student(selected_student)
         else:
             pass
 
@@ -217,7 +224,8 @@ class MainWindow(Gtk.Window):
         name_entry = form_dialog.add_entry("Class Name")
         # Add a student tree view to the dialog.
         students_list_store = Gtk.ListStore(str, str)
-        students_tree_view = form_dialog.add_tree_view(TreeView(students_list_store, ["ID", "Name"]))
+        students_tree_view = TreeView(students_list_store, ["ID", "Name"], Gtk.SelectionMode.MULTIPLE)
+        form_dialog.add_tree_view(students_tree_view)
         students_tree_view.bind(self.database.students)
 
         response = form_dialog.run()
@@ -229,8 +237,50 @@ class MainWindow(Gtk.Window):
                 s = self.database.get_student(student_id)
                 c.add_student(s)
             self.courses_tree_view.bind(self.database.courses)
+            self.database.dump()
 
         form_dialog.destroy()
+
+    def edit_course(self, course: Course):
+        form_dialog = FormDialog(self, title="Edit Course", message="Edit Course...")
+        # Add year and name entries to the dialog.
+        year_entry = form_dialog.add_entry("Class Year")
+        name_entry = form_dialog.add_entry("Class Name")
+        year_entry.set_text(course.year)
+        name_entry.set_text(course.name)
+
+        # Add a student tree view to the dialog.
+        students_list_store = Gtk.ListStore(str, str)
+        students_tree_view = TreeView(students_list_store, ["ID", "Name"], Gtk.SelectionMode.MULTIPLE)
+        form_dialog.add_tree_view(students_tree_view)
+        students_tree_view.bind(self.database.students)
+
+        response = form_dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            course.year = year_entry.get_text()
+            course.name = name_entry.get_text()
+            selected_items = students_tree_view.get_selected_items()
+            for student_id in selected_items:
+                s = self.database.get_student(student_id)
+                c.add_student(s)
+            self.courses_tree_view.bind(self.database.courses)
+            self.database.dump()
+
+        form_dialog.destroy()
+
+    def remove_course(self, course: Course):
+        confirm_dialog = ConfirmDialog(self, title="Remove Course", message="Remove {} {}?".format(
+            course.year, course.name))
+        response = confirm_dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            self.database.remove_course(course)
+            self.courses_tree_view.bind(self.database.courses)
+            self.database.dump()
+        
+        confirm_dialog.destroy()
+
 
 
     def create_student(self):
@@ -242,8 +292,38 @@ class MainWindow(Gtk.Window):
         if response == Gtk.ResponseType.OK:
             self.database.add_student(id_entry.get_text(), name_entry.get_text())
             self.students_tree_view.bind(self.database.students)
+            self.database.dump()
 
         form_dialog.destroy()
+
+    def edit_student(self, student: Student):
+        form_dialog = FormDialog(self, title="Edit Student", message="Edit Student...")
+        id_entry = form_dialog.add_entry("Student ID")
+        name_entry = form_dialog.add_entry("Student Name")
+        id_entry.set_sensitive(False)
+        id_entry.set_text(student.id)
+        name_entry.set_text(student.name)
+        response = form_dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            student.id = id_entry.get_text()
+            student.name = name_entry.get_text()
+            self.students_tree_view.bind(self.database.students)
+            self.database.dump()
+
+        form_dialog.destroy()
+
+    def remove_student(self, student: Student):
+        confirm_dialog = ConfirmDialog(self, title="Remove Student", message="Remove {} {}?".format(
+            student.id, student.name))
+        response = confirm_dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            self.database.remove_student(student)
+            self.students_tree_view.bind(self.database.students)
+            self.database.dump()
+        
+        confirm_dialog.destroy()
 
 
     def train_model(self, widget):
@@ -335,7 +415,7 @@ class FormDialog(ConfirmDialog):
 
 class TreeView(Gtk.TreeView):
     """ Wraps the TreeStore inside and takes care of user selection """
-    def __init__(self, list_store, column_titles: list):
+    def __init__(self, list_store, column_titles: list, selection_mode=Gtk.SelectionMode.SINGLE):
         Gtk.TreeView.__init__(self, list_store)
         self.list_store = list_store
         self.column_titles = column_titles
@@ -350,7 +430,7 @@ class TreeView(Gtk.TreeView):
 
         # Handle row selection.
         selection = self.get_selection()
-        selection.set_mode(Gtk.SelectionMode.MULTIPLE)
+        selection.set_mode(selection_mode)
         selection.connect("changed", self.on_selection_changed)
 
     def on_selection_changed(self, selection):
@@ -366,7 +446,7 @@ class TreeView(Gtk.TreeView):
     def get_selected_items(self):
         return self.selected_items
 
-    def bind(self, objects):
+    def bind(self, objects: list):
         """ Bind this tree view with a list of objects, e.g., all students in db
         Then all fields of these objects will be displayed in the tree view.
         However, if the data gets updated, we'll need to call this method again. (bad design)
@@ -381,6 +461,5 @@ class TreeView(Gtk.TreeView):
                 if i >= len(self.column_titles):
                     break
                 obj_fields.append(value)
-
             print(obj_fields)
             self.list_store.append(obj_fields)
