@@ -211,23 +211,27 @@ class MainWindow(Gtk.Window):
 
 
     def sign_in(self, widget):
-        form_dialog = FormDialog(self, title="Sign in", message="Please enter your student ID")
-        id_entry = form_dialog.add_entry("Student ID")
-        response = form_dialog.run()
+        if len(self.session_tree_view.get_selected_items()) > 0:
+            selected_student_id = self.session_tree_view.get_selected_items()[0]
+            selected_student = self.database.get_student(selected_student_id)
 
-        if response == Gtk.ResponseType.OK:
-            img_path = face.collect_faces()[0]
-            students_ids = face.recognize_face(self.database, img_path)
+            confirm_dialog = ConfirmDialog(self, title="Sign in", message="Sign in as {} {}?".format(
+                selected_student.id, selected_student.name))
+            response = confirm_dialog.run()
 
-            if len(students_ids) > 0:
-                student_id = face.recognize_face(self.database, img_path)[0]
+            if response == Gtk.ResponseType.OK:
+                img_path = face.collect_faces()[0]
+                students_ids = face.recognize_face(self.database, img_path)
 
-                if student_id == id_entry.get_text().upper():
-                    self.session.mark_as_arrived(student_id)
-                    self.update_session_tree_view()
-                    self.current_rollcall_course_label.set_text("Current roll call: " + self.session.__str__())
+                if len(students_ids) > 0:
+                    student_id = face.recognize_face(self.database, img_path)[0]
 
-        form_dialog.destroy()
+                    if student_id == selected_student_id:
+                        self.session.mark_as_arrived(student_id)
+                        self.update_session_tree_view()
+                        self.current_rollcall_course_label.set_text("Current roll call: " + self.session.__str__())
+
+            confirm_dialog.destroy()
 
 
     def create(self, widget):
@@ -545,5 +549,4 @@ class TreeView(Gtk.TreeView):
                 if i >= len(self.column_titles):
                     break
                 obj_fields.append(value)
-                print(obj_fields)
             self.list_store.append(obj_fields)
