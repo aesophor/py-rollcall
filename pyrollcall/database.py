@@ -14,10 +14,11 @@ class Database:
         self.db_file_path = db_file_path
         self.courses = []
         self.students = []
-        self.face_encodings = {
-            "knownEncodings": [],
-            "knownNames": []
-        }
+        self.face_encodings = []
+        #self.face_encodings = {
+        #    "knownEncodings": [],
+        #    "knownNames": []
+        #}
 
     def load(self):
         """ Unpickle courses and students from the file """

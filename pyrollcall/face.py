@@ -61,6 +61,7 @@ def encode_faces(db, faces_dir: str):
     """ Encode all students faces in the specified course 
     :param course: Faces of each student in this course will be processed
     """
+    db.face_encodings.clear()
     image_paths = list(utils.list_images(faces_dir))
 
     for (i, image_path) in enumerate(image_paths):
@@ -82,11 +83,8 @@ def encode_faces(db, faces_dir: str):
         encodings = face_recognition.face_encodings(rgb, boxes)
 
         # Add all face encodings in the photo to our database.
-        for encoding in encodings:
-            db.face_encodings["knownEncodings"].append(encoding)
-            db.face_encodings["knownNames"].append(student_name)
-        #db.face_encodings = [FaceEncoding(e, student_name) for e in encodings]
-
+        db.face_encodings += [FaceEncoding(e, student_name) for e in encodings]
+    
 
 def recognize_face(db, img_path: str):
     """ Recognize the faces in the specified image
@@ -107,11 +105,12 @@ def recognize_face(db, img_path: str):
     # Initialize the list of names for each face detected
     names = []
     
+    db_encodings = [e.encoding for e in db.face_encodings]
 
     # Loop over the facial embeddings
     for encoding in encodings:
         # Attempt to match each face in the input image to our known encodings
-        matches = face_recognition.compare_faces(db.face_encodings["knownEncodings"], encoding)
+        matches = face_recognition.compare_faces(db_encodings, encoding)
         name = "Unknown"
 
         # Check if we've found a match
@@ -124,7 +123,7 @@ def recognize_face(db, img_path: str):
             # Loop over the matched indicies and maintain a count for each
             # recognized face.
             for i in matchedIndices:
-                name = db.face_encodings["knownNames"][i]
+                name = db.face_encodings[i].name
                 counts[name] = counts.get(name, 0) + 1
 
             # Determine the recognized face with the largest number of votes
@@ -136,7 +135,8 @@ def recognize_face(db, img_path: str):
         if name == "Unknown":
             print("[INFO] Unknown person")
 
-        names.append(name)
+        if name != 'Unknown':
+            names.append(name)
 
 
     # Loop over the recognized faces
