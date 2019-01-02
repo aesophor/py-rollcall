@@ -22,7 +22,7 @@ def collect_faces(student=None, img_count=1, capture_key=0x20):
     """
     current_img_no = 0
     taken_photo_paths = []
-    photo_dir = "photos/" if student is None else student.photo_dir
+    photo_dir = "photos/" if student is None else student.get_photo_dir()
     photo_filename = utils.get_datetimestamp().replace('/', '_') if student is None else student.name
     webcam_title = "Face Collector" if student is None else "Face Collector ({})".format(student.name)
 
@@ -71,17 +71,21 @@ def encode_faces(db, faces_dir: str):
 
         # Load the input image and convert it from BGR (OpenCV ordering)
         # to dlib ordering (RGB).
-        image = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB)
+        image = cv2.imread(image_path)
+        rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         # Detect the (x, y) of the bounding boxes corresponding to
         # each face in the input image.
-        boxes = face_recognition.face_locations(image, model="hog")
+        boxes = face_recognition.face_locations(rgb, model="hog")
 
         # Compute the facial embedding for the face.
-        encodings = face_recognition.face_encodings(image, boxes)
+        encodings = face_recognition.face_encodings(rgb, boxes)
 
         # Add all face encodings in the photo to our database.
-        db.face_encodings = [FaceEncoding(e, student_name) for e in encodings]
+        for encoding in encodings:
+            db.face_encodings["knownEncodings"].append(encoding)
+            db.face_encodings["knownNames"].append(student_name)
+        #db.face_encodings = [FaceEncoding(e, student_name) for e in encodings]
 
 
 def recognize_face(db, img_path: str):
@@ -102,12 +106,12 @@ def recognize_face(db, img_path: str):
 
     # Initialize the list of names for each face detected
     names = []
+    
 
     # Loop over the facial embeddings
     for encoding in encodings:
         # Attempt to match each face in the input image to our known encodings
-        db_encodings = [e.encoding for e in db.face_encodings]
-        matches = face_recognition.compare_faces(db_encodings, encoding)
+        matches = face_recognition.compare_faces(db.face_encodings["knownEncodings"], encoding)
         name = "Unknown"
 
         # Check if we've found a match
@@ -120,7 +124,7 @@ def recognize_face(db, img_path: str):
             # Loop over the matched indicies and maintain a count for each
             # recognized face.
             for i in matchedIndices:
-                name = db.face_encodings[i].name
+                name = db.face_encodings["knownNames"][i]
                 counts[name] = counts.get(name, 0) + 1
 
             # Determine the recognized face with the largest number of votes
@@ -129,8 +133,10 @@ def recognize_face(db, img_path: str):
             name = max(counts, key=counts.get)
 
         # Update the list of names
-        if name != "Unknown":
-            names.append(name)
+        if name == "Unknown":
+            print("[INFO] Unknown person")
+
+        names.append(name)
 
 
     # Loop over the recognized faces
@@ -142,6 +148,6 @@ def recognize_face(db, img_path: str):
             0.75, (0, 255, 0), 2)
 
     # Show the output image
-    #cv2.imshow("Image", image)
-    #cv2.waitKey(0)
+    cv2.imshow("Image", image)
+    cv2.waitKey(0)
     return names

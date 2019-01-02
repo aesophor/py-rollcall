@@ -284,7 +284,6 @@ class MainWindow(Gtk.Window):
 
             if response == Gtk.ResponseType.OK:
                 face.collect_faces(selected_student, img_count=int(photo_count_entry.get_text()))
-                selected_student.has_photos = True
                 self.students_tree_view.update(self.database.students)
 
             form_dialog.destroy()
