@@ -24,7 +24,7 @@ class Session:
         :param student: The student who has just arrived
         """
         for student, arrived in self.students_arrival.items():
-            if student.id == student_id:
+            if student.id == student_id and self.students_arrival[student] is not True:
                 self.students_arrival[student] = True
                 self.arrived += 1
                 self.unpresent -= 1

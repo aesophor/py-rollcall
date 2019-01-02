@@ -1,17 +1,20 @@
 # -*- encoding: utf-8 -*-
 
+""" Most of the code in this module were borrowed from this tutorial on pyimagesearch By Adrian Rosebrock.
+https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and-deep-learning/
+"""
+
 import os
 import cv2
 import face_recognition
 
-from pyrollcall.exceptions import MalformedImageException
 import pyrollcall.utils as utils
 
 class FaceEncoding:
-    """ This class is a wrapper of a face encoding and the person's name """
-    def __init__(self, encoding, name: str):
+    """ This class is a wrapper of a face encoding and the student's id """
+    def __init__(self, encoding, student_id: str):
         self.encoding = encoding
-        self.name = name
+        self.student_id = student_id
 
 
 def collect_faces(student=None, img_count=1, capture_key=0x20):
@@ -23,6 +26,7 @@ def collect_faces(student=None, img_count=1, capture_key=0x20):
     """
     current_img_no = 0
     taken_photo_paths = []
+
     photo_dir = "photos/" if student is None else student.get_photo_dir()
     photo_filename = utils.get_datetimestamp().replace('/', '_') if student is None else student.name
     webcam_title = "Face Collector" if student is None else "Face Collector ({})".format(student.name)
@@ -50,7 +54,7 @@ def collect_faces(student=None, img_count=1, capture_key=0x20):
             current_img_no += 1
             if current_img_no >= img_count:
                 break
-        elif key == 27:
+        elif key == 27: # esc
             break
 
     cv2.destroyWindow(webcam_title)
@@ -72,7 +76,7 @@ def encode_faces(db, faces_dir: str, encoding_model="hog"):
             image_path, current=i+1, total=len(image_paths)))
 
         # Extract student ID from image's directory name.
-        student_name = image_path.split(os.path.sep)[-2].split('_')[0]
+        student_id = image_path.split(os.path.sep)[-2].split('_')[0]
 
         # Load input img and convert it from BGR(OpenCV) to RGB(dlib).
         image = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB)
@@ -84,36 +88,36 @@ def encode_faces(db, faces_dir: str, encoding_model="hog"):
         encodings = face_recognition.face_encodings(image, boxes)
 
         # Export all face encodings in the photo to our database.
-        db.face_encodings += [FaceEncoding(e, student_name) for e in encodings]
+        db.face_encodings += [FaceEncoding(e, student_id) for e in encodings]
     
 
-def recognize_face(db, img_path: str, encoding_model="hog"):
+def recognize_faces(db, img_path: str, encoding_model="hog"):
     """ Recognize the faces in the specified image
     :param img_path: Image which contains the face of a student
     :param encoding_model: Use `hog` for speed, `cnn` for accuracy
-    :return: The name of the person recognized
+    :return: A list of ids of the students recognized
     """
-    # Initialize the list of names for each face detected.
-    names = []
-    print("[INFO] recognizing faces...")
+    print("[INFO] recognizing face in {}".format(img_path))
 
+    # Initialize the list of ids for each face detected.
+    db_encodings = [e.encoding for e in db.face_encodings]
+    student_ids = []
+    
     # Load the input image and convert it from BGR to RGB.
     image = cv2.imread(img_path)
-    rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
     # Detect the (x, y) of the bounding box of each face in input image.
-    boxes = face_recognition.face_locations(rgb, model=encoding_model)
+    boxes = face_recognition.face_locations(image_rgb, model=encoding_model)
 
     # Compute the facial embeddings for each face.
-    encodings = face_recognition.face_encodings(rgb, boxes)
+    encodings = face_recognition.face_encodings(image_rgb, boxes)
 
-
-    db_encodings = [e.encoding for e in db.face_encodings]
 
     for encoding in encodings:
         # Attempt to match each face in the input image to our known encodings.
         matches = face_recognition.compare_faces(db_encodings, encoding)
-        name = "Unknown"
+        student_id = "Unknown"
 
         # Check if we've found a match
         if True in matches:
@@ -122,31 +126,32 @@ def recognize_face(db, img_path: str, encoding_model="hog"):
             matchedIndices = [i for (i, b) in enumerate(matches) if b]
             counts = {}
 
-            # Loop over the matched indicies and maintain a count for each
+            # Loop over the matched indices and maintain a count for each
             # recognized face.
             for i in matchedIndices:
-                name = db.face_encodings[i].name
-                counts[name] = counts.get(name, 0) + 1
+                student_id = db.face_encodings[i].student_id
+                counts[student_id] = counts.get(student_id, 0) + 1
 
             # Determine the recognized face with the largest number of votes
             # (note: in the event of an unlikely tie Python will select the
             # first entry in the dict)
-            name = max(counts, key=counts.get)
+            student_id = max(counts, key=counts.get)
 
-        # Update the list of names
-        if name != 'Unknown':
-            names.append(name)
+        # Update the list of student ids
+        if student_id != "Unknown":
+            student_ids.append(student_id)
         else:
             print("[INFO] Unable to recognize this person")
 
 
-    # Loop over the recognized faces
-    for ((top, right, bottom, left), name) in zip(boxes, names):
-        # Draw the predicted face name on the images
+    # Loop over the recognized faces.
+    for ((top, right, bottom, left), student_id) in zip(boxes, student_ids):
+        # Draw the predicted face id on the image.
         cv2.rectangle(image, (left, top), (right, bottom), (0, 255, 0), 2)
         y = top - 15 if top - 15 > 15 else top + 15
-        cv2.putText(image, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX,
-            0.75, (0, 255, 0), 2)
+        cv2.putText(image, student_id, (left, y), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
+
     cv2.imshow("Image", image)
-    cv2.waitKey(0)
-    return names
+    cv2.waitKey(20)
+
+    return student_ids

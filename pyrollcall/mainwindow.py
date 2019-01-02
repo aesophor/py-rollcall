@@ -224,11 +224,11 @@ class MainWindow(Gtk.Window):
 
             if response == Gtk.ResponseType.OK:
                 img_path = face.collect_faces()[0]
-                students_ids = face.recognize_face(self.database, img_path)
+                students_ids = face.recognize_faces(self.database, img_path)
 
+                # face.recognize_faces() will return a list of students' ids.
                 if len(students_ids) > 0:
-                    student_id = face.recognize_face(self.database, img_path)[0]
-
+                    student_id = students_ids[0]
                     if student_id == selected_student_id:
                         self.session.mark_as_arrived(student_id)
                         self.update_session_tree_view()
