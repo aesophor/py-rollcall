@@ -7,7 +7,7 @@
 ## Overview
 Automate traditional roll calls using deep metric learning, i.e., deep learning-based facial recognition.
 
-Please note that this project was developed on Gentoo **Linux** and has not been tested on other platforms!
+Please note that this project was developed under Gentoo **Linux** and has not been tested on other platforms!
 
 ## Dependencies
 * Python >= 3.5
@@ -18,7 +18,7 @@ Please note that this project was developed on Gentoo **Linux** and has not been
 * face_recognition
 
 ## Installation
-Please Make sure you have all dependencies installed. The installation commands can vary between different distros
+Please make sure you have all dependencies installed. The installation commands can vary between different distros
 ```
 $ sudo emerge -av python pygtk
 $ pip3 install --user python-opencv imutils dlib face_recognition
