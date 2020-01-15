@@ -9,4 +9,4 @@ pdf:
 
 clean:
 	rm -rf $(BUILD_DIR)
-	rm -f src/*.pdf
+	rm -f src/figures/*.pdf

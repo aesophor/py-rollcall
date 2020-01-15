@@ -19,7 +19,7 @@
 
 % Report content.
 \begin{center}
-\section*{\abstractname}
+  \section*{\abstractname}
 \end{center}
 \large
 
@@ -58,27 +58,27 @@ Davis King, on a dataset of approximately three million images, while face\_reco
 dlib which enables users to use it easily.
 \newline
 
-Users can manage their data, including courses, students and facial embeddings through GUI. They can also 
+Users can manage their data, including courses, students and facial embeddings through GUI\@. They can also 
 initiate a roll call through GUI, letting students sign in to a class with facial recognition, as shown in
 Figure 1.
 \newline
 
 \begin{figure}[b!]
-    \centering
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{preview1.eps}
-            \caption{Managing courses.}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{preview2.eps}
-            \caption{Managing students.}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{preview3.eps}
-            \caption{A student signing in.}
-        \end{subfigure}
-        \caption{pyRollCall's GUI, database and facial recognition.}
-        \label{fig:implementation}
+  \centering
+  \begin{subfigure}[b]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{figures/preview1.eps}
+    \caption{Managing courses.}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{figures/preview2.eps}
+    \caption{Managing students.}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{figures/preview3.eps}
+    \caption{A student signing in.}
+  \end{subfigure}
+  \caption{pyRollCall's GUI, database and facial recognition.}
+  \label{fig:implementation}
 \end{figure}
 
 
@@ -89,49 +89,49 @@ from the tutorial [1] on pyimagesearch.
 \newline
 
 \begin{enumerate}
-    \item U10516001 - Alan Grant (22 images)
-    \item U10516002 - Claire Dearing (53 images)
-    \item U10516003 - Ellie Sattler (31 images)
-    \item U10516004 - Ian Malcolm (41 images)
-    \item U10516005 - John Hammond (36 images)
-    \item U10516006 - Owen Grady (35 images)
-    \item U10516045 - Guan-Zhong Wang (5 images)
+  \item U10516001 - Alan Grant (22 images)
+  \item U10516002 - Claire Dearing (53 images)
+  \item U10516003 - Ellie Sattler (31 images)
+  \item U10516004 - Ian Malcolm (41 images)
+  \item U10516005 - John Hammond (36 images)
+  \item U10516006 - Owen Grady (35 images)
+  \item U10516045 - Guan-Zhong Wang (5 images)
 \end{enumerate}
 
 It can distinguish between 7 different people, successfully automating a roll call, as shown in Figure 2.
 
 \begin{figure}[h!]
-    \centering
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{exp01.eps}
-            \caption{U10516001 Alan Grant.}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{exp02.eps}
-            \caption{U10516002 Claire Dearing.}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{exp03.eps}
-            \caption{U10516003 Ellie Sattler.}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{exp04.eps}
-            \caption{U10516004 Ian Malcolm.}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{exp05.eps}
-            \caption{U10516005 John Hammond.}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{exp06.eps}
-            \caption{U10516006 Owen Grady.}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{exp45.eps}
-            \caption{U10516045 Guan-Zhong Wang.}
-        \end{subfigure}
-        \caption{Experimental Result.}
-    \label{fig:coffee}
+  \centering
+  \begin{subfigure}[b]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{figures/exp01.eps}
+    \caption{U10516001 Alan Grant.}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{figures/exp02.eps}
+    \caption{U10516002 Claire Dearing.}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{figures/exp03.eps}
+    \caption{U10516003 Ellie Sattler.}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{figures/exp04.eps}
+    \caption{U10516004 Ian Malcolm.}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{figures/exp05.eps}
+    \caption{U10516005 John Hammond.}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{figures/exp06.eps}
+    \caption{U10516006 Owen Grady.}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{figures/exp45.eps}
+    \caption{U10516045 Guan-Zhong Wang.}
+  \end{subfigure}
+  \caption{Experimental Result.}
+  \label{fig:coffee}
 \end{figure}
 
 
