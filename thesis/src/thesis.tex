@@ -10,7 +10,7 @@
 
 % Set the section numbering to 1, 2, 3, and so on.
 \renewcommand\thesection{\arabic{section}}
-\setstretch{1.8}
+\setstretch{1.7}
 
 % Cover page
 \begin{document}
@@ -21,10 +21,16 @@
 \newpage
 
 \input{sections/abstract}
-\input{sections/introduction}
-\input{sections/implementation}
-\input{sections/experimental-results}
-\input{sections/discussion}
-\input{sections/references}
+\input{sections/introduction/introduction}
+\input{sections/related-works/related-works}
+\input{sections/system-design-and-implementation/system-design-and-implementation.tex}
+\input{sections/solution-validation/solution-validation}
+\input{sections/conclusion-and-future-research/conclusion-and-future-research}
+\input{sections/bibliography}
+
+%\input{sections/implementation}
+%\input{sections/experimental-results}
+%\input{sections/discussion}
+%\input{sections/references}
 
 \end{document}
