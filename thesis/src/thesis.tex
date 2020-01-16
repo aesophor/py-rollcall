@@ -7,18 +7,23 @@
 \usepackage{subcaption}
 \usepackage{enumerate}
 \usepackage{setspace}
-\usepackage{tocstyle}
-\usetocstyle{standard}
 
-% Line spacing
-\setstretch{1.8}
+
+% Variables
+\def\titleLineSpacing{2.5}
+\def\tocLineSpacing{1.5}
+\def\contentLineSpacing{1.8}
 
 % Cover page
 \begin{document}
+\setstretch{\titleLineSpacing}
 \input{cover}
+\setstretch{\contentLineSpacing}
 
 % Table of Contents
+\setstretch{\tocLineSpacing}
 \tableofcontents
+\setstretch{\contentLineSpacing}
 \newpage
 
 \input{chapters/abstract}
