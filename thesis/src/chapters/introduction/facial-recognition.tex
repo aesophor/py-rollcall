@@ -1,3 +1,43 @@
-\section{Facial Recognition}
-The uniqueness of a person lies in his or her facial appearances. We can use facial recognition technology
-to 
+\section{Facial Recognition Technology (FRT)}
+Facial Recognition is a technology which is capable of identifying or verifying the individuals in a digital image or video.
+Generally, it consists of four steps:
+
+\vspace{0.5cm}
+\setstretch{1}
+\begin{enumerate}
+  \item Face detection
+  \item Face normalization
+  \item Facial feature extraction
+  \item Classification
+\end{enumerate}
+\setstretch{\contentLineSpacing}
+
+The first step to perform in facial recognition is to identify all the faces in it. The biggest challenge of face detection
+is that faces can be tilted and turned to any direction, and the program must be able to detect them regardless of
+these situations. There are also some other factors that can prevent the faces from being correctly detected:
+lighting, expressions, noises, face occlusions, etc. Secondly, the faces have to be normalized before performing
+facial feature extraction. This step can include geometric normalization, lighting normalization, angle normalization.
+
+Now we are ready to extract the unique features from a face, but questions arise: which features should we collect, and
+how should we quantify a face? It could be the width between the eyes, the length of the nose, or even the width-height ratio
+of the face. It turns out that the best approach is to let the computer itself figure this out by deep learning.
+This is usually done by training a deep Convolutional Neural Network (CNN) which can generate a face encoding for each face
+in the image. The last step is comparing this face encoding with other face encodings that already exist in the database.
+If a match is found, then we've successfully identified an individual. The above process is actually similar to how we
+identify people in real life:
+
+\vspace{0.5cm}
+\setstretch{1}
+\begin{enumerate}
+  \item Find all the faces within our vision.
+  \item Identify the faces regardless of their angle, direction and lighting.
+  \item Look for the unique features of the faces.
+  \item Compare these unique features with all the people you know.
+\end{enumerate}
+\setstretch{\contentLineSpacing}
+
+
+\subsection{Face Detection}
+Face Detection went popular in 2001 when Paul Viola and Michael Jones published the \emph{Viola–Jones object detection framework},
+enabling objects on a camera to be detected in real time. Later on, more robust approaches are proposed. We will be using
+Histogram of Oriented Gradients (HOG) in our system for this task.

@@ -8,14 +8,16 @@
 \usepackage{enumerate}
 \usepackage{setspace}
 
-
 % Variables
 \def\titleLineSpacing{2.5}
 \def\tocLineSpacing{1.5}
 \def\contentLineSpacing{1.8}
 
-% Cover page
+
 \begin{document}
+\pagenumbering{gobble}  % disables page numbering
+
+% Cover page
 \setstretch{\titleLineSpacing}
 \input{cover}
 \newpage
@@ -26,6 +28,7 @@
 \newpage
 
 % Contents
+\pagenumbering{arabic}  % enables page numbering
 \setstretch{\contentLineSpacing}
 \input{chapters/abstract}
 \input{chapters/introduction/introduction}
