@@ -46,14 +46,15 @@ Histogram of Oriented Gradients (HOG) is a feature description technique used in
 detection. The main idea is to split an image into several portions of the same size (since doing this for every pixel will give
 us more information than we actually need), and then find out the major direction which brightness changes for each portion.
 The result will be a representation of the fundamental structures of a face. Now we can look for the regions which are
-similar to a known facial pattern which is generated from a huge amount of facial images. This way we can detect all faces
+similar to a known facial pattern generated from a huge amount of facial images. This way we can detect all the faces
 in an image.
 
 
 \subsection{Face Landmark Estimation}
-Face Detection went popular in 2001 when Paul Viola and Michael Jones published the \emph{Viola–Jones object detection framework},
-enabling objects on a camera to be detected in real time. Later on, more robust approaches are proposed. We will be using
-Histogram of Oriented Gradients (HOG) in our system for this task.
+Face Alignment is an important step in facial recognition. Before performing facial feature extraction, geometrically
+normalizing faces could greatly improve the accuracy of facial recognition. We will attempt to locate 68 facial landmarks
+by estimating their positions using an algorithm proposed by Vahid Kazemi and Josephine Sullivan in 2014 that comes with dlib,
+and use affine transformation to align the faces.
 
 \subsection{Deep Metric Learning}
 Face Detection went popular in 2001 when Paul Viola and Michael Jones published the \emph{Viola–Jones object detection framework},
