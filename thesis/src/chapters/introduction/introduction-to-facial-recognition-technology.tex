@@ -1,4 +1,4 @@
-\section{Facial Recognition Technology (FRT)}
+\section{Introduction to Facial Recognition Technology}
 Facial Recognition is a technology which is capable of identifying or verifying the individuals in a digital image or video.
 Generally, it consists of four steps:
 
@@ -19,7 +19,7 @@ lighting, expressions, noises, face occlusions, etc. Secondly, the faces have to
 facial feature extraction. This step can include geometric normalization, lighting normalization, angle normalization.
 
 Now we are ready to extract the unique features from a face, but questions arise: which features should we collect, and
-how should we quantify a face? It could be the width between the eyes, the length of the nose, or even the width-height ratio
+how should we quantify a face? It can be the width between the eyes, the length of the nose, or even the width-height ratio
 of the face. It turns out that the best approach is to let the computer itself figure this out by deep learning.
 This is usually done by training a deep Convolutional Neural Network (CNN) which can generate a face encoding for each face
 in the image. The last step is comparing this face encoding with other face encodings that already exist in the database.
@@ -44,7 +44,7 @@ Histogram of Oriented Gradients (HOG) in our system for this task.
 
 Histogram of Oriented Gradients (HOG) is a feature description technique used in image processing with the aim of object
 detection. The main idea is to split an image into several portions of the same size (since doing this for every pixel will give
-us more information than we actually need), and then find out the major direction which brightness changes for each portion.
+us too much information more than we actually need), and then find out the major direction which brightness changes for each portion.
 The result will be a representation of the fundamental structures of a face. Now we can look for the regions which are
 similar to a known facial pattern generated from a huge amount of facial images. This way we can detect all the faces
 in an image.
@@ -52,14 +52,31 @@ in an image.
 
 \subsection{Face Landmark Estimation}
 Face Alignment is an important step in facial recognition. Before performing facial feature extraction, geometrically
-normalizing faces could greatly improve the accuracy of facial recognition. We will attempt to locate 68 facial landmarks
-by estimating their positions using an algorithm proposed by Vahid Kazemi and Josephine Sullivan in 2014 that comes with dlib,
-and use affine transformation to align the faces.
+normalizing faces can greatly improve the accuracy of facial recognition. We will attempt to locate 68 facial landmarks
+by estimating their positions with an algorithm proposed by Vahid Kazemi and Josephine Sullivan in 2014 that is packaged
+with dlib, and then use affine transformation to align the faces.
+
 
 \subsection{Deep Metric Learning}
-Face Detection went popular in 2001 when Paul Viola and Michael Jones published the \emph{Viola–Jones object detection framework},
-enabling objects on a camera to be detected in real time. Later on, more robust approaches are proposed. We will be using
-Histogram of Oriented Gradients (HOG) in our system for this task.
+Previous researches have shown that deep learning does a better job than human in knowing which facial features should
+be measured. Deep Metric Learning, a machine learning model, plays a vital role in modern facial recognition technology.
+It works by training a deep Convolutional Neural Network (CNN) to generate 128-d measurements for each face. The training
+process is typically carried out using a \emph{Triplet Network} which requires three images as input:
+
+\vspace{0.5cm}
+\setstretch{1}
+\begin{enumerate}
+  \item an image of person A
+  \item another image of person A
+  \item an image of person B
+\end{enumerate}
+\setstretch{\contentLineSpacing}
+
+In each step of training, the algorithm will tweak the neural network, making the measurements of photo 1 and 2
+slightly closer to each other while making the measurements of photo 2 and 3 slightly differenet from each other.
+The training process only have to be done once and it has already been done by Davis King, the original author of dlib.
+In addition, the trained neural network is publicly available so that we don't have to train the network ourselves.
+We can directly use the pre-trained network to generate measurements for any face.
 
 \subsection{SVM Classifier}
 Face Detection went popular in 2001 when Paul Viola and Michael Jones published the \emph{Viola–Jones object detection framework},
