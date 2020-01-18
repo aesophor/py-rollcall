@@ -54,7 +54,7 @@ in an image.
 Face Alignment is an important step in facial recognition. Before performing facial feature extraction, geometrically
 normalizing faces can greatly improve the accuracy of facial recognition. We will attempt to locate 68 facial landmarks
 by estimating their positions with an algorithm proposed by Vahid Kazemi and Josephine Sullivan in 2014 that is packaged
-with dlib, and then use affine transformation to align the faces.
+with \emph{dlib}, and then use affine transformation to align the faces.
 
 
 \subsection{Deep Metric Learning}
@@ -74,11 +74,12 @@ process is typically carried out using a \emph{Triplet Network} which requires t
 
 In each step of training, the algorithm will tweak the neural network, making the measurements of photo 1 and 2
 slightly closer to each other while making the measurements of photo 2 and 3 slightly differenet from each other.
-The training process only have to be done once and it has already been done by Davis King, the original author of dlib.
+The training process only have to be done once and it has already been done by Davis King, the original author of \emph{dlib}.
 In addition, the trained neural network is publicly available so that we don't have to train the network ourselves.
 We can directly use the pre-trained network to generate measurements for any face.
 
-\subsection{SVM Classifier}
-Face Detection went popular in 2001 when Paul Viola and Michael Jones published the \emph{Viola–Jones object detection framework},
-enabling objects on a camera to be detected in real time. Later on, more robust approaches are proposed. We will be using
-Histogram of Oriented Gradients (HOG) in our system for this task.
+\subsection{k-Nearest Neighbor (k-NN) Classification}
+The last step in facial recognition is running a classification algorithm which helps us find out the person in
+a database containing all measurements of the known people who has the closest measurements to the newly inputted face.
+In our system, we use k-Nearest Neighbor (k-NN) classifier, a simple image classification algorithm, to identify whom
+a face belongs to.

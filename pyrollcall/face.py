@@ -102,7 +102,7 @@ def recognize_faces(db, img_path: str, encoding_model="hog"):
     # Initialize the list of ids for each face detected.
     db_encodings = [e.encoding for e in db.face_encodings]
     student_ids = []
-    
+
     # Load the input image and convert it from BGR to RGB.
     image = cv2.imread(img_path)
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
