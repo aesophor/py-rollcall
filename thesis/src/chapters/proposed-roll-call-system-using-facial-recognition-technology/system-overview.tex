@@ -1,23 +1,23 @@
 \mySection{System Overview}
 Our system's primary goal is to help school faculties perform roll calls with ease.
-Traditional roll calls usually require teachers to call the names of students one by one
-and record students' attendance. Our FRT roll call system will simply take a photo
-of the entire classroom and record the attendance of students using Facial Recognition,
-thus saving more time for both teachers and students.
+Traditional roll calls require teacher to call the names of students individually to record students' attendance,
+while PyRollCall simply takes a photo of the entire class and record students' attendance
+using Facial Recognition, thus saving more time for both teachers and students in classes.
 \vspace{0.5cm}
 
-Another usage of this system is taking the photo of each student individually as long as
+Another usage of this system is taking the photo of each student one by one as long as
 the size of the class is small enough. If the size of the class is too large, this apparently
-can result in longer waiting time for the students. Consequently, our main objective is
-to ensure that the system can accurately recognize all the faces in a large image
-as possible as it can.
+can result in longer waiting time for the students, and hence this approach is impractical.
+Consequently, our main objective is to ensure that the system can accurately recognize all the faces
+in a large image as possible as it can.
 \vspace{0.5cm}
 
-We also implement a user-friendly Graphical User Interface (GUI) with PyGTK,
-allowing a user (typically a teacher) to perform the following actions:
-\vspace{0.5cm}
+PyRollCall is able to run on Windows, macOS and unix-like systems as long as the system supports
+Python3 and running GUI applications. Figure~\ref{fig:systemAppearance} demonstrates the appearance
+of this system. The actions that can be performed using the GUI are listed as follows:
+\vspace{0.2cm}
 
-\setstretch{1}
+\setstretch{0.8}
 \begin{enumerate}
   \item Maintain the data of the course and students they teach.
   \item Take photos of students with a camera and train the neural network.
@@ -25,11 +25,6 @@ allowing a user (typically a teacher) to perform the following actions:
   \item Export the result of roll calls to files.
 \end{enumerate}
 \setstretch{\myContentLineSpacing}
-
-PyRollCall is able to run on Windows, macOS and unix-like systems as long as
-the system has Python3 and X11\footnote{test} installed. All of its external dependencies are already packaged
-in the project via Python's \emph{virtualenv}, thus its installation is fairly simple:
-\vspace{0.5cm}
 
 \begin{figure}[!htb]
   \centering
@@ -45,19 +40,23 @@ in the project via Python's \emph{virtualenv}, thus its installation is fairly s
     \includegraphics[width=\linewidth]{figures/preview3.eps}
     \caption{A student signing in.}
   \end{subfigure}
-  \caption{pyRollCall's GUI, database and facial recognition.}
-  \label{fig:implementation}
+  \caption{PyRollCall running on a Linux machine with X11\protect\footnotemark \ installed.}
+  \label{fig:systemAppearance}
 \end{figure}
 
+\footnotetext{X11, also known as X Window System, or simply X, is a windowing system that provides the basic framework for building GUI environments.}
+
+
+\subsection{Installation}
+Since PyRollCall is cross-platform and all of its external dependencies are already packaged
+in the project via Python's \emph{virtualenv}, its installation is fairly simple:
 
 \begin{lstlisting}[numbers=none,xleftmargin=0em,caption={Shell commands to checkout and run PyRollCall}]
 $ git clone https://github.com/aesophor/pyrollcall.git
 $ cd pyrollcall && ./pyrollcall.py 
 \end{lstlisting}
 
-By executing \emph{pyrollcall.py}, a Python script located at the project root directory,
-users can launch PyRollCall and start using it.
-
+To launch the system, execute \emph{pyrollcall.py}. The Python script can be located at the project's top-level directory.
 The system comes with an easy-to-use graphical user interface (GUI) crafted with PyGTK,
 allowing teachers to easily
 (1) Maintain the data of the course and students they teach,
