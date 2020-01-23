@@ -1,8 +1,8 @@
 \mySection{Introduction to Facial Recognition Technology (FRT)}
 Facial recognition is a technology which is capable of identifying or verifying the individuals in a digital image or video.
 Generally, it consists of four steps:
+\vspace{0.3cm}
 
-\vspace{0.5cm}
 \setstretch{1}
 \begin{enumerate}
   \item Face detection
@@ -17,6 +17,7 @@ is that faces can be tilted and turned to any direction, and the program must be
 these situations. There are also some other factors that can prevent the faces from being correctly detected:
 lighting, expressions, noises, face occlusions, etc. Secondly, the faces have to be normalized before performing
 facial feature extraction. This step can include geometric normalization, lighting normalization, angle normalization.
+\vspace{0.3cm}
 
 Now we are ready to extract the unique features from a face, but questions arise: which features should we collect, and
 how should we quantify a face? It can be the width between the eyes, the length of the nose, or even the width-height ratio
@@ -25,8 +26,8 @@ This is usually done by training a deep Convolutional Neural Network (CNN) which
 in the image. The last step is comparing this face encoding with other face encodings that already exist in the database.
 If a match is found, then we've successfully identified the face of an individual. The above process is actually similar to
 how we identify people in real life:
+\vspace{0.3cm}
 
-\vspace{0.5cm}
 \setstretch{1}
 \begin{enumerate}
   \item Find all the faces within our vision.
@@ -41,6 +42,7 @@ how we identify people in real life:
 Face Detection went popular in 2001 when Paul Viola and Michael Jones published the \emph{Viola–Jones object detection framework},
 enabling objects on a camera to be detected in real time. Later on, more robust approaches are proposed. We will be using
 Histogram of Oriented Gradients (HOG) in our system for this task.
+\vspace{0.3cm}
 
 Histogram of Oriented Gradients (HOG) is a feature description technique used in image processing with the aim of object
 detection. The main idea is to split an image into several portions of the same size (since doing this for every pixel will give
@@ -62,8 +64,8 @@ Previous research has shown that deep learning does a better job than human in k
 be measured. Deep Metric Learning, a machine learning model, plays a vital role in modern facial recognition technology.
 It works by training a deep Convolutional Neural Network (CNN) to generate 128-d measurements for each face. The training
 process is typically carried out using a \emph{Triplet Network} which requires three images as input:
+\vspace{0.3cm}
 
-\vspace{0.5cm}
 \setstretch{1}
 \begin{enumerate}
   \item an image of person A
