@@ -29,21 +29,26 @@ Figure~\ref{fig:system-architecture} shows the system architecture of PyRollCall
   \vspace{1cm}
 \end{figure}
 
-
-\subsection{System Architecture}
-The GUI front end is built with PyGTK, enabling users to easily have access
-to the various functionalities in PyRollCall. Underneath the GUI, we use
-OpenCV library to capture images via cameras, face\_recognition and dlib to
-recognize faces of students, and pickle\footnote{pickle is a Python module
-  which implements binary protocols to serialize and deserialize Python objects.}
-to serialize and deserialize facial measurements (or facial embeddings).
-
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=\linewidth]{figures/system-architecture.png}
   \caption{System Architecture}
   \label{fig:system-architecture}
 \end{figure}
+
+
+\subsection{System Architecture}
+The GUI is built with \emph{PyGTK}, giving users easy access to the
+various functionalities in PyRollCall. Underneath the GUI, we use
+\emph{OpenCV} to capture images via cameras, \emph{face\_recognition} and \emph{dlib} to
+recognize faces of students, and \emph{pickle}\footnote{pickle is a Python module
+  which implements binary protocols to serialize and deserialize Python objects.}
+to serialize and deserialize facial measurements (or facial embeddings).
+\vspace{0.5cm}
+
+The User's data is saved in the lightweight database implemented by Python's pickle,
+inclusive of the courses he or she teaches, the course-student mappings and
+all the pre-computed facial embeddings.
 
 
 \subsection{Implementation}
