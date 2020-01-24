@@ -1,10 +1,11 @@
 \mySection{The Design of PyRollCall}
-In this section, we present the use cases and the design and PyRollCall's architecture.
+In this section, we present the use cases and the design of PyRollCall's architecture.
 In the following context, a "user" refers to a "teacher" who wishes to perform roll calls
-using this system, since the end user of PyRollCall is typically a teacher. In other words,
+using PyRollCall, since the end user of this system is typically a teacher. In other words,
 students are not the direct users of this system.
 Figure~\ref{fig:use-case-diagram} shows the use case diagram of PyRollCall, whereas
 Figure~\ref{fig:system-architecture} shows the system architecture of PyRollCall.
+
 
 \subsection{Use Cases}
 \vspace{0.5cm}
@@ -21,15 +22,43 @@ Figure~\ref{fig:system-architecture} shows the system architecture of PyRollCall
 
 \begin{figure}[!htb]
   \centering
+  \vspace{1cm}
   \includegraphics[width=\linewidth]{figures/use-case-diagram.png}
   \caption{Use Case Diagram}
   \label{fig:use-case-diagram}
+  \vspace{1cm}
 \end{figure}
 
+
 \subsection{System Architecture}
+The GUI front end is built with PyGTK, enabling users to easily have access
+to the various functionalities in PyRollCall. Underneath the GUI, we use
+OpenCV library to capture images via cameras, face\_recognition and dlib to
+recognize faces of students, and pickle\footnote{pickle is a Python module
+  which implements binary protocols to serialize and deserialize Python objects.}
+to serialize and deserialize facial measurements (or facial embeddings).
+
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=\linewidth]{figures/system-architecture.png}
   \caption{System Architecture}
   \label{fig:system-architecture}
 \end{figure}
+
+
+\subsection{Implementation}
+Text
+
+\begin{algorithm}
+\caption{A}
+\label{alg:A}
+\begin{algorithmic}
+\STATE {set $r(t)=x(t)$}
+\REPEAT
+\STATE set $h(t)=r(t)$
+\REPEAT
+\STATE set $h(t)=r(t)$
+\UNTIL{B}
+\UNTIL{B}
+\end{algorithmic}
+\end{algorithm}
