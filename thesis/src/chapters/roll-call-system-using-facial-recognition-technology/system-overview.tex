@@ -12,13 +12,13 @@ When a face is caputured in roll calls, the system will use k-NN classification 
 to determine whom the face belongs to.
 \vspace{0.5cm}
 
-Users (typically teachers) should also enter the names of the courses they teach into the system.
-For each course, enter which students are taking it including students' names and IDs.
-PyRollCall's GUI is demonstrated in figure~\ref{fig:systemAppearance}. 
-After setting up these data into the system, PyRollCall will be ready to perform roll call for a specific course
-using facial recognition. To summarize, users should (1) collect around 10 to 15 photos for each student and
+The user (usually a teacher) should enter the names of the courses into the system, as well as all students' names and IDs,
+and for each course select which students are taking it. After entering these data into the system,
+PyRollCall will be ready to perform roll call for a specific course using facial recognition.
+To summarize, users should (1) collect approximately 10 to 15 photos for each student and
 let PyRollCall pre-compute their facial embeddings, and (2) set up the courses' and students' data.
-\vspace{0.5cm}
+Figure~\ref{fig:systemAppearance} demonstrates the GUI used to manage the data of courses and students.
+\vspace{0.8cm}
 
 \begin{figure}[!htb]
   \centering
@@ -42,25 +42,39 @@ let PyRollCall pre-compute their facial embeddings, and (2) set up the courses' 
 %can result in longer waiting time for the students, and hence this approach is impractical.
 %Consequently, our main objective is to ensure that the system can accurately recognize all the faces
 %in a large image as possible as it can.
+%The actions available via PyRollCall's GUI are listed as follows:
+%\vspace{0.5cm}
 
-The actions available via PyRollCall's GUI are listed as follows:
-\vspace{0.5cm}
-
-\setstretch{0.8}
-\begin{itemize}
-  \item Maintain the data of the course and students they teach.
-  \item Take photos of students with a camera and compute the facial embeddings.
-  \item Perform roll calls.
-  \item Export the results of roll calls to files.
-\end{itemize}
-\setstretch{\myContentLineSpacing}
+%\setstretch{0.8}
+%\begin{itemize}
+%  \item Maintain the data of the course and students they teach.
+%  \item Take photos of students with a camera and compute the facial embeddings.
+%  \item Perform roll calls for a specific course.
+%  \item Export the results of roll calls to files.
+%\end{itemize}
+%\setstretch{\myContentLineSpacing}
 
 
-\vspace{0.5cm}
+%\vspace{0.5cm}
+When a roll call ends, the system automatically exports a statistical report to a file.
+These reports will be categorized nicely into different directories by date,
+with the filename being the course name. Listing~\ref{lst:example-log} demonstrates
+an example file containing the result of a roll call.
+\clearpage
+
+\begin{lstlisting}[numbers=none,xleftmargin=0em,caption={Layout of PyRollCall's root directory.},label={lst:example-log}]
+$ cat logs/2019/01/01/Java.txt
+Course Name: Java
+Export Time: 2019/01/0120:37
+Arrived: 8 / Late: 2 / 
+Total: 10
+Late Students: Tsai,John
+\end{lstlisting}
+
 Now that we have understood the prerequisites of the facial recognition features in PyRollCall,
 it is time that we get to the installation details of this system. PyRollCall is able to run on Windows,
 macOS and unix-like systems as long as the system supports Python 3 and GUI applications.
-Furthermore, PyRollCall is open-sourced and managed with \emph{git}\footnote{git is a distributed
+Furthermore, PyRollCall is open-source and managed with \emph{git}\footnote{git is a distributed
   version control system used for tracking file content changes in source code during software development},
 and all of its external dependencies are already packaged in the project via Python's {virtualenv}\footnote{\
   virtualenv is a tool to created isolated Python environments by maintaining a set of libraries that a specific application depends on.},

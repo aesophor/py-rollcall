@@ -8,6 +8,8 @@ Figure~\ref{fig:system-architecture} shows the system architecture of PyRollCall
 
 
 \subsection{Use Cases}
+\vspace{0.3cm}
+
 \setstretch{1.0}
 \begin{itemize}
   \item Users can maintain the data of the courses and students they teach.
@@ -35,10 +37,10 @@ Figure~\ref{fig:system-architecture} shows the system architecture of PyRollCall
 
 \subsection{System Architecture}
 Figure~\ref{fig:system-architecture} shows the system architecture of PyRollCall.
-The GUI is built with \emph{PyGTK}, giving users easy access to all functionalities in the system.
-The user can manage the data of courses and students, take photos for students, compute their
-facial embeddings and perform roll calls via GUI\@. Underneath the GUI,
-we use \emph{OpenCV} to capture images via cameras, \emph{face\_recognition} and \emph{dlib} to
+The GUI is built with \emph{PyGTK}, and it is already included in the project's \emph{virtualenv}, making
+PyRollCall a highly portable system. The user can manage the data of courses and students,
+take photos for students, compute their facial embeddings and perform roll calls via GUI\@.
+Underneath the GUI, we use \emph{OpenCV} to capture images via cameras, \emph{face\_recognition} and \emph{dlib} to
 recognize faces of students, and \emph{pickle}\footnote{pickle is a Python module
   which implements binary protocols to serialize and deserialize Python objects.}
 to serialize and deserialize facial measurements (or facial embeddings).
@@ -65,9 +67,9 @@ drwxr-xr-x  7 aesophor aesophor 4.0K Jan 25 12:12 .git
 
 The \emph{pyrollcall} directory contains PyRollCall's modules and class definitions,
 as shown in listing~\ref{lst:modules-and-classes}. Note that trivial entries are also
-omitted here this time. Readers have probably noticed that there's also another \emph{pyrollcall.py}
+omitted here. Readers have probably noticed that there's also another \emph{pyrollcall.py}
 in this directory, this module contains code that will initialize the user's data
-from \emph{rollcall.db} and start the GUI, while the top-level \emph{pyrollcall.py} merely serves as an entry point to the system.
+from \emph{rollcall.db} and start the GUI, while the top-level \emph{pyrollcall.py} merely serves as the entry point to the system.
 
 \begin{lstlisting}[numbers=none,xleftmargin=0em,caption={PyRollCall's modules and classes.},label={lst:modules-and-classes}]
 $ ls -la pyrollcall
@@ -90,6 +92,7 @@ to capture images with a camera, compute facial embeddings and recognize faces,
 the details of which will be covered in the next subsection.
 
 \subsection{Implementation}
+In this subsection, we present
 Text
 
 \begin{algorithm}
