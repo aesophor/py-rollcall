@@ -57,11 +57,12 @@ teaches, the course-student mappings and all the pre-computed facial embeddings 
 \begin{lstlisting}[numbers=none,xleftmargin=0em,caption={Layout of PyRollCall's root directory.},label={lst:proj-root-layout}]
 $ ls -la
 total 48K
-drwxr-xr-x  2 aesophor aesophor 4.0K Jan 25 11:10 pyrollcall
-drwxr-xr-x  5 aesophor aesophor 4.0K Nov 13 09:13 venv
-drwxr-xr-x  7 aesophor aesophor 4.0K Jan 25 12:12 .git
--rw-r--r--  1 aesophor aesophor  258 Jan 23 12:40 rollcall.db
--rwxr-xr-x  1 aesophor aesophor  197 Sep 26 20:33 pyrollcall.py
+drwxr-xr-x 3 aesophor aesophor 4.0K Dec  1 14:04 faces
+drwxr-xr-x 2 aesophor aesophor 4.0K Jan 25 11:10 pyrollcall
+drwxr-xr-x 5 aesophor aesophor 4.0K Nov 13 09:13 venv
+drwxr-xr-x 7 aesophor aesophor 4.0K Jan 25 12:12 .git
+-rw-r--r-- 1 aesophor aesophor  258 Jan 23 12:40 rollcall.db
+-rwxr-xr-x 1 aesophor aesophor  197 Sep 26 20:33 pyrollcall.py
 \end{lstlisting}
 \vspace{0.2cm}
 
@@ -87,24 +88,54 @@ total 64K
 \end{lstlisting}
 \vspace{0.2cm}
 
-The most important module is \emph{face.py}, a module which contains code
+Among all modules, the most important one is \emph{face.py}, a module which contains code
 to capture images with a camera, compute facial embeddings and recognize faces,
-the details of which will be covered in the next subsection.
+the details of which will be covered in the next subsection. The photos of
+students should be of png format with their filename being \emph{name\_number.png}.
+Furthermore, photos of a specific student should be grouped into a single directory
+with the directory name being \emph{studentID\_name}. All directories containing students' photos
+should be put in the \emph{faces} directory.
+A minimal example is provided in listing~\ref{lst:faces-tree-output};
+the student's name is "Marco" and the student's ID is "U10516045".
+\vspace{0.2cm}
+
+\begin{lstlisting}[numbers=none,xleftmargin=0em,caption={Example hierarchy of the \emph{faces} directory.},label={lst:faces-tree-output}]
+$ tree faces 
+faces
+|___ U10516045_Marco
+    |__ Marco_0.png
+    |__ Marco_1.png
+
+    1 directory, 2 files
+\end{lstlisting}
+\vspace{0.2cm}
+
+To use PyRollCall completely without a camera connected to the computer,
+simply follow the rules mentioned above and place the files in the corresponding directories
+with correct filenames.
 
 \subsection{Implementation}
-In this subsection, we present
-Text
+The heart of PyRollCall is \emph{encode\_faces()} and \emph{recognize\_faces()} in \emph{face.py}.
+The first function, encode\_faces(), enumerates all the images in the \emph{faces} directory
+and compute the embeddings of each faces in the images. Each image in this directory
+should contain exactly one face in order to prevent erroneous results during k-NN classification.
+
+\emph{encode\_faces()} takes two arguments, an instance of Database and a string specifying
+the absolute path to the \emph{faces} directory. It extracts the student's ID from the directory name,
+get the bounding box of each face, compute the embeddings for faces inside the bounding boxes,
+and save all the embeddings to the database. The idea is shown in Algorithm~\ref{alg:encode_faces}.
+\vspace{0.2cm}
 
 \begin{algorithm}
-\caption{A}
-\label{alg:A}
-\begin{algorithmic}
-\STATE {set $r(t)=x(t)$}
-\REPEAT
-\STATE set $h(t)=r(t)$
-\REPEAT
-\STATE set $h(t)=r(t)$
-\UNTIL{B}
-\UNTIL{B}
-\end{algorithmic}
+  \caption{encode\_faces(database, faces\_dir)}
+  \label{alg:encode_faces}
+  \begin{algorithmic}
+    \FOR{\textbf{each} image in faces\_dir}
+    \STATE $id \leftarrow extract\_student\_id(image)$
+    \STATE $box \leftarrow get\_bounding\_box(image)$
+    \STATE $e \leftarrow compute\_encodings(image, box)$
+    \STATE
+    \STATE database.face\_encodings.insert(FaceEncoding(e, id)) 
+    \ENDFOR
+  \end{algorithmic}
 \end{algorithm}
