@@ -127,15 +127,48 @@ and save all the embeddings to the database. The idea is shown in Algorithm~\ref
 \vspace{0.2cm}
 
 \begin{algorithm}
-  \caption{encode\_faces(database, faces\_dir)}
+  \caption{Pre-compute facial embeddings (encodings) of all faces in the \emph{faces} directory.}
   \label{alg:encode_faces}
   \begin{algorithmic}
-    \FOR{\textbf{each} image in faces\_dir}
-      \STATE $id \leftarrow extract\_student\_id(image)$
-      \STATE $box \leftarrow get\_bounding\_box(image)$
-      \STATE $e \leftarrow compute\_encodings(image, box)$
-      \STATE
-      \STATE database.face\_encodings.insert(FaceEncoding(e, id)) 
-    \ENDFOR
+    \Procedure{encode\_faces}{database, faces\_dir}
+    \For{\textbf{each} image \textbf{in} faces\_dir}
+        \State $box \leftarrow get\_bounding\_box(image)$
+        \State $e \leftarrow compute\_encoding(image, box)$
+        \State $id \leftarrow get\_student\_id(image)$
+        \State database.face\_encodings.insert(FaceEncoding(e, id)) 
+      \EndFor
+    \EndProcedure
   \end{algorithmic}
 \end{algorithm}
+\vspace{0.5cm}
+
+
+\emph{recognize\_faces()} takes two arguments, an instance of Database and an image object.
+Firstly, we detect all bounding boxes of the faces in the given image, and then
+compute all facial encodings according to where these bounding boxes are located.
+Secondly, for each facial encoding, we compare it with all known encodings from the database.
+Each comparison should give us an array of boolean values, we can then count the votes
+, find out which student has the highest vote, and mark that student as arrived.
+The pseudo code is shown in Algorithm~\ref{alg:recognize_faces}.
+\vspace{0.2cm}
+
+\begin{algorithm}
+  \caption{recognize\_faces(database, image)}
+  \label{alg:recognize_faces}
+  \begin{algorithmic}
+    \Procedure{recognize\_faces}{database, image}
+      \State $boxes \leftarrow get\_bounding\_boxes(image)$
+      \State $encodings \leftarrow compute\_encodings(image, boxes)$
+      \State 
+      \For{\textbf{each} e $\in$ encodings}
+        \State $votes \leftarrow compare\_faces(database.face\_encodings, e)$
+        \State  $student \leftarrow get\_student\_with\_most\_votes(votes)$
+        \State student.mark\_as\_arrived()
+      \EndFor
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+\vspace{0.5cm}
+
+Please note that the pseudocode shown above differs from the actual implementation,
+but the general idea are exactly the same.
