@@ -120,7 +120,7 @@ The first function, encode\_faces(), enumerates all the images in the \emph{face
 and compute the embeddings of each faces in the images. Each image in this directory
 should contain exactly one face in order to prevent erroneous results during k-NN classification.
 
-\emph{encode\_faces()} takes two arguments, an instance of Database and a string specifying
+\emph{encode\_faces()} takes two arguments: an instance of Database and a string specifying
 the absolute path to the \emph{faces} directory. It extracts the student's ID from the directory name,
 get the bounding box of each face, compute the embeddings for faces inside the bounding boxes,
 and save all the embeddings to the database. The idea is shown in Algorithm~\ref{alg:encode_faces}.
@@ -143,7 +143,7 @@ and save all the embeddings to the database. The idea is shown in Algorithm~\ref
 \vspace{0.5cm}
 
 
-\emph{recognize\_faces()} takes two arguments, an instance of Database and an image object.
+\emph{recognize\_faces()} takes two arguments: an instance of Database and an image object.
 Firstly, we detect all bounding boxes of the faces in the given image, and then
 compute all facial encodings according to where these bounding boxes are located.
 Secondly, for each facial encoding, we compare it with all known encodings from the database.
