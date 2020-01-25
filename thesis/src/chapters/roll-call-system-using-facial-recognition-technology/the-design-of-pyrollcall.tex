@@ -131,11 +131,11 @@ and save all the embeddings to the database. The idea is shown in Algorithm~\ref
   \label{alg:encode_faces}
   \begin{algorithmic}
     \FOR{\textbf{each} image in faces\_dir}
-    \STATE $id \leftarrow extract\_student\_id(image)$
-    \STATE $box \leftarrow get\_bounding\_box(image)$
-    \STATE $e \leftarrow compute\_encodings(image, box)$
-    \STATE
-    \STATE database.face\_encodings.insert(FaceEncoding(e, id)) 
+      \STATE $id \leftarrow extract\_student\_id(image)$
+      \STATE $box \leftarrow get\_bounding\_box(image)$
+      \STATE $e \leftarrow compute\_encodings(image, box)$
+      \STATE
+      \STATE database.face\_encodings.insert(FaceEncoding(e, id)) 
     \ENDFOR
   \end{algorithmic}
 \end{algorithm}
