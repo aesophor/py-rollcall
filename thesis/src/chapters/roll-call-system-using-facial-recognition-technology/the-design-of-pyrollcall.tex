@@ -8,8 +8,6 @@ Figure~\ref{fig:system-architecture} shows the system architecture of PyRollCall
 
 
 \subsection{Use Cases}
-\vspace{0.5cm}
-
 \setstretch{1.0}
 \begin{itemize}
   \item Users can maintain the data of the courses and students they teach.
@@ -38,18 +36,60 @@ Figure~\ref{fig:system-architecture} shows the system architecture of PyRollCall
 
 
 \subsection{System Architecture}
-The GUI is built with \emph{PyGTK}, giving users easy access to the
-various functionalities in PyRollCall. Underneath the GUI, we use
-\emph{OpenCV} to capture images via cameras, \emph{face\_recognition} and \emph{dlib} to
+Figure~\ref{fig:system-architecture} shows the system architecture of PyRollCall.
+The GUI is built with \emph{PyGTK}, giving users easy access to all functionalities in the system.
+The user can manage the data of courses and students, take photos for students, compute their
+facial embeddings and perform roll calls via GUI\@. Underneath the GUI,
+we use \emph{OpenCV} to capture images via cameras, \emph{face\_recognition} and \emph{dlib} to
 recognize faces of students, and \emph{pickle}\footnote{pickle is a Python module
   which implements binary protocols to serialize and deserialize Python objects.}
 to serialize and deserialize facial measurements (or facial embeddings).
 \vspace{0.5cm}
 
-The user's data is saved in a lightweight database implemented by Python's pickle,
-inclusive of the courses he or she teaches, the course-student mappings and
-all the pre-computed facial embeddings of students.
+The layout of project's root directory is presented in listing~\ref{lst:proj-root-layout}.
+Note that trivial entries are omitted here for obvious reasons.
+The entry point to the entire system is \emph{pyrollcoll.py}, whereas all modules are placed
+inside the \emph{pyrollcall} directory. The user's data is stored in \emph{rollcall.db},
+a lightweight database implemented with Python's pickle, inclusive of the courses he or she
+teaches, the course-student mappings and all the pre-computed facial embeddings of students.
+\vspace{0.2cm}
 
+\begin{lstlisting}[numbers=none,xleftmargin=0em,caption={Layout of PyRollCall's root directory.},label={lst:proj-root-layout}]
+$ ls -la
+total 48K
+drwxr-xr-x  2 aesophor aesophor 4.0K Jan 25 11:10 pyrollcall
+drwxr-xr-x  5 aesophor aesophor 4.0K Nov 13 09:13 venv
+drwxr-xr-x  7 aesophor aesophor 4.0K Jan 25 12:12 .git
+-rw-r--r--  1 aesophor aesophor  258 Jan 23 12:40 rollcall.db
+-rwxr-xr-x  1 aesophor aesophor  197 Sep 26 20:33 pyrollcall.py
+\end{lstlisting}
+\vspace{0.2cm}
+
+The \emph{pyrollcall} directory contains PyRollCall's modules and class definitions,
+as shown in listing~\ref{lst:modules-and-classes}. Note that trivial entries are also
+omitted here this time. Readers have probably noticed that there's also another \emph{pyrollcall.py}
+in this directory, this module contains code that will initialize the user's data
+from \emph{rollcall.db} and start the GUI, while the top-level \emph{pyrollcall.py} merely serves as an entry point to the system.
+
+\begin{lstlisting}[numbers=none,xleftmargin=0em,caption={PyRollCall's modules and classes.},label={lst:modules-and-classes}]
+$ ls -la pyrollcall
+total 64K
+-rw-r--r-- 1 aesophor aesophor 1.2K Sep 26 20:33 course.py
+-rw-r--r-- 1 aesophor aesophor 3.1K Sep 26 20:33 database.py
+-rw-r--r-- 1 aesophor aesophor 5.8K Jan 18 14:22 face.py
+-rw-r--r-- 1 aesophor aesophor  493 Sep 26 20:33 __init__.py
+-rw-r--r-- 1 aesophor aesophor  18K Sep 26 20:33 mainwindow.py
+-rw-r--r-- 1 aesophor aesophor  399 Sep 26 20:33 pyrollcall.py
+-rw-r--r-- 1 aesophor aesophor 2.0K Sep 26 20:33 session.py
+-rw-r--r-- 1 aesophor aesophor  827 Sep 26 20:33 student.py
+-rw-r--r-- 1 aesophor aesophor  399 Sep 26 20:33 utils.py
+-rw-r--r-- 1 aesophor aesophor 4.2K Sep 26 20:33 widget.py
+\end{lstlisting}
+\vspace{0.2cm}
+
+The most important module is \emph{face.py}, a module which contains code
+to capture images with a camera, compute facial embeddings and recognize faces,
+the details of which will be covered in the next subsection.
 
 \subsection{Implementation}
 Text
