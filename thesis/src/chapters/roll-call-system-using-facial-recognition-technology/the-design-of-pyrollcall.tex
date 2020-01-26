@@ -145,10 +145,10 @@ and save all the embeddings to the database. The idea is shown in Algorithm~\ref
 
 \emph{recognize\_faces()} takes two arguments: an instance of Database and an image object.
 Firstly, we detect all bounding boxes of the faces in the given image, and then
-compute all facial encodings according to where these bounding boxes are located.
-Secondly, for each facial encoding, we compare it with all known encodings from the database.
-Each comparison should give us an array of boolean values, we can then count the votes
-, find out which student has the highest votes, and mark that student as arrived.
+compute all facial encodings in this image according to where these bounding boxes are located.
+Secondly, for each facial encoding generated from this image, we compare it with all known encodings in the database.
+Each comparison should give us an array of boolean values, we can then count the votes,
+find out which student has the highest votes, and mark that student as arrived.
 The pseudocode is shown in Algorithm~\ref{alg:recognize_faces}.
 Please note that the pseudocode shown in this subsection do differ from the actual implementation,
 but the general idea is exactly the same.
