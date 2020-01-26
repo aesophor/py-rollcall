@@ -1,25 +1,25 @@
 \mySection{PyRollCall Libraries}
 
 \subsection{OpenCV}  % 4.1.1.26
-OpenCV (Open Source Computer Vision) is a cross-platform computer vision and machine learning library which was
+OpenCV (Open Source Computer Vision) \cite{opencv} is a cross-platform computer vision and machine learning library which was
 originally developed by Intel Corporation. It is used to develop real-time image processing, computer vision
 and pattern recognition programs. The library is primarily written in C++, thus most interface of
 OpenCV is for C++ and C. It also has bindings for other programming languages such as Python, Java and MATLAB.
 Our project uses OpenCV to capture images from cameras.
 
 \subsection{dlib}  % 19.18.0
-Dlib is a C++ toolkit containing machine learning algorithms and tools to solve complex real world problems.
+Dlib \cite{dlib} is a C++ toolkit containing machine learning algorithms and tools to solve complex real world problems.
 It is widely used in robotics, embedded devices, mobile phones, and large high performance
 computing environments. Despite being written in C++, dlib also has bindings for Python. The use of \emph{dlib}
 in PyRollCall is employing deep metric learning algorithms and dlib models to solve facial recognition tasks.
 
 \subsection{face\_recognition}  % 1.2.3
-face\_recognition is an easy-to-use face recognition library for Python which is built upon dlib's state-of-the-art
-deep metric learning model with an accuracy of 99.38\%. We use face\_recognition to detect faces in an image,
-estimate facial landmarks, compute a 128-d measurement for each face and perform facial classification.
+face\_recognition \cite{face-recognition} is an easy-to-use face recognition library for Python which is built upon
+dlib's state-of-the-art deep metric learning model with an accuracy of 99.38\%. We use face\_recognition to detect faces
+in an image, estimate facial landmarks, compute a 128-d measurement for each face and perform facial classification.
 
 \subsection{PyGTK}  % 1.2.3
-PyGTK is a set of Python wrappers for the GTK+, a free, open-source and cross-platform widget toolkit for
+PyGTK \cite{pygtk} is a set of Python wrappers for the GTK+, a free, open-source and cross-platform widget toolkit for
 developing GUI applications. It was originally developed in C by GNOME developer James Henstridge.
 PyGTK will be phased out and replaced with PyGObject which uses GObject introspection to dynamically generate
 bindings for Python and other languages, eliminating the delay between GTK updates and binding updates for
