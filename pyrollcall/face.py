@@ -97,7 +97,7 @@ def encode_faces(db, faces_dir: str, encoding_model="hog"):
 
         # Export all face encodings in the photo to our database.
         db.face_encodings += [FaceEncoding(e, student_id) for e in encodings]
-    
+
 
 def recognize_faces(db, img_path: str, encoding_model="hog"):
     """ Recognize the faces in the specified image

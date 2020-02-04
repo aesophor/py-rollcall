@@ -19,3 +19,18 @@ rate of face detection is rather high. In real-world scenarios, the faces of stu
 may be turned into various angles and the results of face detection will vary. Hence,
 when taking photos from the students, the teacher will have to ask for the attention from
 the students for a few seconds.
+\vspace{0.5cm}
+
+Secondly, we evaluate the effectiveness of facial recognition. Figure~\ref{fig:facial-recog-test}
+demonstrates a successful facial recognition performed by PyRollCall. In order to make
+the facial recognition feature works correctly, the teacher should collect 10 to 15 photos
+(or ideally 15 to 25 photos) from each student and let PyRollCall pre-compute all of the
+facial embeddings from each photo.
+\vspace{0.5cm}
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[]{figures/facial-recog-test.png}
+  \caption{Facial Recognition}
+  \label{fig:facial-recog-test}
+\end{figure}
