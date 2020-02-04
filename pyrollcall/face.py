@@ -40,6 +40,14 @@ def collect_faces(student=None, img_count=1, capture_key=0x20):
         rval = False
 
     while rval:
+        image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        boxes = face_recognition.face_locations(image_rgb)
+
+        # Loop over the recognized faces.
+        for top, right, bottom, left in boxes:
+            # Draw the predicted face id on the image.
+            cv2.rectangle(img, (left, top), (right, bottom), (0, 255, 0), 2)
+
         cv2.imshow(webcam_title, img)
         rval, img = cam.read()
         key = cv2.waitKey(20)
