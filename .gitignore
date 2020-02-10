@@ -3,6 +3,5 @@ logs/*
 photos/*
 scripts/*
 test/*
-rollcall.db
 thesis/build/*
 thesis/src/figures/*.pdf
