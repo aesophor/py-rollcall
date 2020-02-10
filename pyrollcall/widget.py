@@ -21,6 +21,7 @@ class ConfirmDialog(Gtk.Dialog):
         self.show_all()
 
 
+
 class FormDialog(ConfirmDialog):
     """ Ask user to fill out the given form """
     def __init__(self, parent, title="", message="", width=150, height=50):

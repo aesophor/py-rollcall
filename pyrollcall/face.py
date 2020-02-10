@@ -71,12 +71,14 @@ def collect_faces(student=None, img_count=1, capture_key=0x20):
 
 
 def encode_faces(db, faces_dir: str, encoding_model="hog"):
-    """ Encode all students faces in the specified directory and subdirectories.
+    """ (Re-)encode all students faces in the specified directory and subdirectories.
     Each photo should only contain a single face.
     :param course: Faces of each student in this course will be processed
     :param encoding_model: Use `hog` for speed, `cnn` for accuracy
     """
     db.face_encodings.clear()
+    db.encoded_face_img_paths.clear()
+
     image_paths = list(utils.list_images(faces_dir))
 
     for (i, image_path) in enumerate(image_paths):
@@ -97,6 +99,42 @@ def encode_faces(db, faces_dir: str, encoding_model="hog"):
 
         # Export all face encodings in the photo to our database.
         db.face_encodings += [FaceEncoding(e, student_id) for e in encodings]
+        db.encoded_face_img_paths.append(image_path)
+
+
+def encode_new_faces(db, faces_dir: str, encoding_model="hog"):
+    """ Encode new students' faces which have not been encoded before.
+    Each photo should only contain a single face.
+    :param course: Faces of each student in this course will be processed
+    :param encoding_model: Use `hog` for speed, `cnn` for accuracy
+    """
+    image_paths = list(utils.list_images(faces_dir))
+
+    for (i, image_path) in enumerate(image_paths):
+
+        # Skip this image if it has already been processed before.
+        if image_path in db.encoded_face_img_paths:
+            continue
+
+        print("[INFO] processing image {} {current}/{total}".format(
+            image_path, current=i+1, total=len(image_paths)))
+
+        # Extract student ID from image's directory name.
+        student_id = image_path.split(os.path.sep)[-2].split('_')[0]
+
+        # Load input img and convert it from BGR(OpenCV) to RGB(dlib).
+        image = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB)
+
+        # Detect the (x, y) of the bounding box of each face in input image.
+        boxes = face_recognition.face_locations(image, model=encoding_model)
+
+        # Compute the facial embedding for the face.
+        encodings = face_recognition.face_encodings(image, boxes)
+
+        # Export all face encodings in the photo to our database.
+        db.face_encodings += [FaceEncoding(e, student_id) for e in encodings]
+        db.encoded_face_img_paths.append(image_path)
+
 
 
 def recognize_faces(db, img_path: str, encoding_model="hog"):

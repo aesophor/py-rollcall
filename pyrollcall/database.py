@@ -15,10 +15,7 @@ class Database:
         self.courses = []
         self.students = []
         self.face_encodings = []
-        #self.face_encodings = {
-        #    "knownEncodings": [],
-        #    "knownNames": []
-        #}
+        self.encoded_face_img_paths = []
 
     def load(self):
         """ Unpickle courses and students from the file """
@@ -27,6 +24,7 @@ class Database:
             self.courses = data["courses"]
             self.students = data["students"]
             self.face_encodings = data["face_encodings"]
+            self.encoded_face_img_paths = data["encoded_face_img_paths"]
 
     def dump(self):
         """ Pickle courses and students to the file """
@@ -34,12 +32,13 @@ class Database:
             data = pickle.dump({
                 "courses": self.courses,
                 "students": self.students,
-                "face_encodings": self.face_encodings
+                "face_encodings": self.face_encodings,
+                "encoded_face_img_paths": self.encoded_face_img_paths
             }, f)
 
 
     def add_course(self, semester: str, name: str):
-        """ Add a new course 
+        """ Add a new course
         :param semester: The semester of the course
         :param name: The name of the course
         :return: The course we've just created

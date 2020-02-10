@@ -29,12 +29,13 @@ class MainWindow(Gtk.Window):
         self.set_default_geometry(640, 480)
         self.set_border_width(10)
 
-        self.database = None 
+        self.database = None
         self.session = None
 
         self.start_rollcall_btn = Gtk.Button("Start")
         self.end_rollcall_btn = Gtk.Button("End")
-        self.sign_in_btn = Gtk.Button("Sign in to class...")
+        self.rollcall_take_photo_btn = Gtk.Button("Take Photo")
+        self.rollcall_choose_photo_btn = Gtk.Button("Choose Photo")
         self.session_tree_view = None
         self.current_rollcall_course_label = Gtk.Label("No ongoing rollcall.")
 
@@ -66,18 +67,22 @@ class MainWindow(Gtk.Window):
         self.end_rollcall_btn.connect("clicked", self.stop_rollcall)
         self.end_rollcall_btn.set_sensitive(False)
 
-        self.sign_in_btn.connect("clicked", self.sign_in)
-        self.sign_in_btn.set_sensitive(False)
+        self.rollcall_take_photo_btn.connect("clicked", self.rollcall_take_photo)
+        self.rollcall_take_photo_btn.set_sensitive(False)
+
+        self.rollcall_choose_photo_btn.connect("clicked", self.rollcall_choose_photo)
+        self.rollcall_choose_photo_btn.set_sensitive(False)
 
         header_box.pack_start(self.start_rollcall_btn, True, True, 0)
         header_box.pack_start(self.end_rollcall_btn, True, True, 0)
-        header_box.pack_start(self.sign_in_btn, True, True, 0)
+        header_box.pack_start(self.rollcall_take_photo_btn, True, True, 0)
+        header_box.pack_start(self.rollcall_choose_photo_btn, True, True, 0)
 
         banner_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
         banner_row = Gtk.ListBoxRow()
         banner_row.add(banner_box)
         listbox.add(banner_row)
-    
+
         banner_box.pack_start(self.current_rollcall_course_label, True, True, 0)
 
         content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
@@ -87,8 +92,8 @@ class MainWindow(Gtk.Window):
 
         self.session_tree_view = TreeView(Gtk.ListStore(str, str, bool), ["ID", "Name", "Arrived"])
         content_box.pack_start(self.session_tree_view, True, True, 0)
-        
-        self.notebook.append_page(listbox, Gtk.Label('Roll Call'))       
+
+        self.notebook.append_page(listbox, Gtk.Label('Roll Call'))
 
     def init_edit_page(self):
         # Create the edit page.
@@ -102,24 +107,28 @@ class MainWindow(Gtk.Window):
 
         create_btn = Gtk.Button("Create")
         create_btn.connect("clicked", self.create)
-        
+
         edit_btn = Gtk.Button("Edit")
         edit_btn.connect("clicked", self.edit)
-        
+
         remove_btn = Gtk.Button("Remove")
         remove_btn.connect("clicked", self.remove)
 
         take_photos_btn = Gtk.Button("Take Photos")
         take_photos_btn.connect("clicked", self.take_photos)
 
-        train_model_btn = Gtk.Button("Train Model")
-        train_model_btn.connect("clicked", self.train_models)
+        train_model_compute_all_btn = Gtk.Button("Retrain Model (slow)")
+        train_model_compute_all_btn.connect("clicked", self.train_model_compute_all)
+
+        train_model_compute_new_btn = Gtk.Button("Train Model (fast)")
+        train_model_compute_new_btn.connect("clicked", self.train_model_compute_new)
 
         header_box.pack_start(create_btn, True, True, 0)
         header_box.pack_start(edit_btn, True, True, 0)
         header_box.pack_start(remove_btn, True, True, 0)
         header_box.pack_start(take_photos_btn, True, True, 0)
-        header_box.pack_start(train_model_btn, True, True, 0)
+        header_box.pack_start(train_model_compute_all_btn, True, True, 0)
+        header_box.pack_start(train_model_compute_new_btn, True, True, 0)
 
 
         content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
@@ -138,7 +147,7 @@ class MainWindow(Gtk.Window):
         courses_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
         courses_row = Gtk.ListBoxRow()
         courses_row.add(courses_box)
-        courses_listbox.add(courses_row) 
+        courses_listbox.add(courses_row)
         self.courses_tree_view = TreeView(Gtk.ListStore(int, str, str, int), ["id", "semester", "Name", "Student Count"])
         if self.database is not None:
             self.courses_tree_view.update(self.database.courses)
@@ -148,7 +157,7 @@ class MainWindow(Gtk.Window):
         students_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
         students_row = Gtk.ListBoxRow()
         students_row.add(students_box)
-        students_listbox.add(students_row) 
+        students_listbox.add(students_row)
         self.students_tree_view = TreeView(Gtk.ListStore(str, str, bool), ["id", "Name", "Has Photos"])
         if self.database is not None:
             self.students_tree_view.update(self.database.students)
@@ -156,7 +165,7 @@ class MainWindow(Gtk.Window):
 
         self.manage_page_notebook.append_page(courses_listbox, Gtk.Label('All Courses'))
         self.manage_page_notebook.append_page(students_listbox, Gtk.Label('All Students'))
-        content_box.pack_start(self.manage_page_notebook, True, True, 0)        
+        content_box.pack_start(self.manage_page_notebook, True, True, 0)
 
         self.notebook.append_page(listbox, Gtk.Label('Manage Courses/Students'))
 
@@ -192,7 +201,8 @@ class MainWindow(Gtk.Window):
             self.session = Session(selected_course)
             self.start_rollcall_btn.set_sensitive(False)
             self.end_rollcall_btn.set_sensitive(True)
-            self.sign_in_btn.set_sensitive(True)
+            self.rollcall_take_photo_btn.set_sensitive(True)
+            self.rollcall_choose_photo_btn.set_sensitive(True)
             self.update_session_tree_view()
             self.current_rollcall_course_label.set_text("Current roll call: " + self.session.__str__())
 
@@ -207,34 +217,45 @@ class MainWindow(Gtk.Window):
             self.session = None
             self.start_rollcall_btn.set_sensitive(True)
             self.end_rollcall_btn.set_sensitive(False)
-            self.sign_in_btn.set_sensitive(False)
+            self.rollcall_take_photo_btn.set_sensitive(False)
+            self.rollcall_choose_photo_btn.set_sensitive(False)
             self.current_rollcall_course_label.set_text("No ongoing rollcall.")
 
         confirm_dialog.destroy()
 
+    def rollcall_take_photo(self, widget):
+        confirm_dialog = ConfirmDialog(self, title="Roll Call", message="Perform rollcall via taking photo?")
+        response = confirm_dialog.run()
 
-    def sign_in(self, widget):
-        if len(self.session_tree_view.get_selected_items()) > 0:
-            selected_student_id = self.session_tree_view.get_selected_items()[0]
-            selected_student = self.database.get_student(selected_student_id)
+        if response == Gtk.ResponseType.OK:
+            img_path = face.collect_faces()[0]
+            arrived_student_ids = face.recognize_faces(self.database, img_path)
 
-            confirm_dialog = ConfirmDialog(self, title="Sign in", message="Sign in as {} {}?".format(
-                selected_student.id, selected_student.name))
-            response = confirm_dialog.run()
+            for id in arrived_student_ids:
+                self.session.mark_as_arrived(id)
 
-            if response == Gtk.ResponseType.OK:
-                img_path = face.collect_faces()[0]
-                students_ids = face.recognize_faces(self.database, img_path)
+            self.update_session_tree_view()
+            self.current_rollcall_course_label.set_text("Current roll call: " + self.session.__str__())
 
-                # face.recognize_faces() will return a list of students' ids.
-                if len(students_ids) > 0:
-                    student_id = students_ids[0]
-                    if student_id == selected_student_id:
-                        self.session.mark_as_arrived(student_id)
-                        self.update_session_tree_view()
-                        self.current_rollcall_course_label.set_text("Current roll call: " + self.session.__str__())
+        confirm_dialog.destroy()
 
-            confirm_dialog.destroy()
+    def rollcall_choose_photo(self, widget):
+        file_chooser_dialog = Gtk.FileChooserDialog("Please choose a photo", None, Gtk.FileChooserAction.OPEN,
+                                                    (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                                                     Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+        response = file_chooser_dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            img_path = file_chooser_dialog.get_filename()
+            arrived_student_ids = face.recognize_faces(self.database, img_path)
+
+            for id in arrived_student_ids:
+                self.session.mark_as_arrived(id)
+
+            self.update_session_tree_view()
+            self.current_rollcall_course_label.set_text("Current roll call: " + self.session.__str__())
+
+        file_chooser_dialog.destroy()
 
 
     def create(self, widget):
@@ -272,17 +293,17 @@ class MainWindow(Gtk.Window):
             selected_student_id = self.students_tree_view.get_selected_items()[0]
             selected_student = self.database.get_student(selected_student_id)
             self.remove_student(selected_student)
-    
+
     def take_photos(self, widget):
         selected_students_ids = self.students_tree_view.get_selected_items()
 
         if len(selected_students_ids) > 0:
             selected_student_id = selected_students_ids[0]
             selected_student = self.database.get_student(selected_student_id)
-            
+
             form_dialog = FormDialog(self, title="Take Photos", message="Click OK and Press SPACE to take photos")
             photo_count_entry = form_dialog.add_entry("Number of Photos")
-            photo_count_entry.set_text("5") # remove this hardcoded shit later
+            photo_count_entry.set_text("5")
             response = form_dialog.run()
 
             if response == Gtk.ResponseType.OK:
@@ -291,16 +312,25 @@ class MainWindow(Gtk.Window):
 
             form_dialog.destroy()
 
-    def train_models(self, widget):
-        confirm_dialog = ConfirmDialog(self, title="Training Model", message="This may take a while, are you sure?")
+    def train_model_compute_all(self, widget):
+        confirm_dialog = ConfirmDialog(self, title="Training Model", message="This may take a long time, proceed?")
         response = confirm_dialog.run()
 
         if response == Gtk.ResponseType.OK:
-            face.encode_faces(self.database, "faces/") # remove this hardcoded shit later
+            face.encode_faces(self.database, "faces/")
             self.database.dump()
-        
+
         confirm_dialog.destroy()
 
+    def train_model_compute_new(self, widget):
+        confirm_dialog = ConfirmDialog(self, title="Training Model", message="This may take a while, proceed?")
+        response = confirm_dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            face.encode_new_faces(self.database, "faces/")
+            self.database.dump()
+
+        confirm_dialog.destroy()
 
 
     def create_course(self):
@@ -379,7 +409,7 @@ class MainWindow(Gtk.Window):
             self.database.remove_course(course)
             self.courses_tree_view.update(self.database.courses)
             self.database.dump()
-        
+
         confirm_dialog.destroy()
 
 
@@ -423,7 +453,7 @@ class MainWindow(Gtk.Window):
             self.database.remove_student(student)
             self.students_tree_view.update(self.database.students)
             self.database.dump()
-        
+
         confirm_dialog.destroy()
 
 
