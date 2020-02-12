@@ -7,6 +7,7 @@ https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and
 import os
 import cv2
 import face_recognition
+import time
 
 import pyrollcall.utils as utils
 
@@ -70,7 +71,7 @@ def collect_faces(student=None, img_count=1, capture_key=0x20):
     return taken_photo_paths
 
 
-def encode_faces(db, faces_dir: str, encoding_model="hog"):
+def encode_faces(db, faces_dir: str, encoding_model="cnn"):
     """ (Re-)encode all students faces in the specified directory and subdirectories.
     Each photo should only contain a single face.
     :param course: Faces of each student in this course will be processed
@@ -80,6 +81,7 @@ def encode_faces(db, faces_dir: str, encoding_model="hog"):
     db.encoded_face_img_paths.clear()
 
     image_paths = list(utils.list_images(faces_dir))
+    time_start = time.perf_counter()
 
     for (i, image_path) in enumerate(image_paths):
         print("[INFO] processing image {} {current}/{total}".format(
@@ -101,14 +103,18 @@ def encode_faces(db, faces_dir: str, encoding_model="hog"):
         db.face_encodings += [FaceEncoding(e, student_id) for e in encodings]
         db.encoded_face_img_paths.append(image_path)
 
+    time_end = time.perf_counter()
+    print(f"[INFO] faces encoded in {time_end - time_start:0.4f} seconds")
 
-def encode_new_faces(db, faces_dir: str, encoding_model="hog"):
+
+def encode_new_faces(db, faces_dir: str, encoding_model="cnn"):
     """ Encode new students' faces which have not been encoded before.
     Each photo should only contain a single face.
     :param course: Faces of each student in this course will be processed
     :param encoding_model: Use `hog` for speed, `cnn` for accuracy
     """
     image_paths = list(utils.list_images(faces_dir))
+    time_start = time.perf_counter()
 
     for (i, image_path) in enumerate(image_paths):
 
@@ -135,9 +141,11 @@ def encode_new_faces(db, faces_dir: str, encoding_model="hog"):
         db.face_encodings += [FaceEncoding(e, student_id) for e in encodings]
         db.encoded_face_img_paths.append(image_path)
 
+    time_end = time.perf_counter()
+    print(f"[INFO] faces encoded in {time_end - time_start:0.4f} seconds")
 
 
-def recognize_faces(db, img_path: str, encoding_model="hog"):
+def recognize_faces(db, img_path: str, encoding_model="cnn"):
     """ Recognize the faces in the specified image
     :param img_path: Image which contains the face of a student
     :param encoding_model: Use `hog` for speed, `cnn` for accuracy
