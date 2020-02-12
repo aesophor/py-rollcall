@@ -11,6 +11,9 @@ import time
 
 import pyrollcall.utils as utils
 
+
+g_encoding_model = 'cnn'
+
 class FaceEncoding:
     """ This class is a wrapper of a face encoding and the student's id """
     def __init__(self, encoding, student_id: str):
@@ -71,7 +74,7 @@ def collect_faces(student=None, img_count=1, capture_key=0x20):
     return taken_photo_paths
 
 
-def encode_faces(db, faces_dir: str, encoding_model="cnn"):
+def encode_faces(db, faces_dir: str, encoding_model=g_encoding_model):
     """ (Re-)encode all students faces in the specified directory and subdirectories.
     Each photo should only contain a single face.
     :param course: Faces of each student in this course will be processed
@@ -107,7 +110,7 @@ def encode_faces(db, faces_dir: str, encoding_model="cnn"):
     print(f"[INFO] faces encoded in {time_end - time_start:0.4f} seconds")
 
 
-def encode_new_faces(db, faces_dir: str, encoding_model="cnn"):
+def encode_new_faces(db, faces_dir: str, encoding_model=g_encoding_model):
     """ Encode new students' faces which have not been encoded before.
     Each photo should only contain a single face.
     :param course: Faces of each student in this course will be processed
@@ -145,7 +148,7 @@ def encode_new_faces(db, faces_dir: str, encoding_model="cnn"):
     print(f"[INFO] faces encoded in {time_end - time_start:0.4f} seconds")
 
 
-def recognize_faces(db, img_path: str, encoding_model="cnn"):
+def recognize_faces(db, img_path: str, encoding_model=g_encoding_model):
     """ Recognize the faces in the specified image
     :param img_path: Image which contains the face of a student
     :param encoding_model: Use `hog` for speed, `cnn` for accuracy
