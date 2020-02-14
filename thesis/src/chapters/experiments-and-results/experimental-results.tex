@@ -34,11 +34,53 @@ Testing Set 3 & 9/20                       & 13/20                      & 14/20 
 \clearpage
 
 
+In most cases, PyRollCall can recognize faces correctly as long as 25 to 30 photos are collected
+beforehand from each individual. However, sometimes erroneous facial recognition can still take place,
+especially if the targets are wearing makeup. Figure~\ref{fig:false-recog1} shows an example where
+faulty facial recognition happens due to makeup.
+\vspace{0.2cm}
+
+\begin{figure}[!htb]
+  \centering
+  \begin{subfigure}[b]{0.3\linewidth}
+    \includegraphics[width=\linewidth]{figures/false-recog-correct1.png}
+    \caption{Ke Jia Yan}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.3\linewidth}
+    \includegraphics[width=\linewidth]{figures/false-recog-error1.png}
+    \caption{Wang Li Kun}
+  \end{subfigure}
+  \caption{Erroneous facial recognition, example 1.}
+  \label{fig:false-recog1}
+\end{figure}
+
+
+Another reason which can lead to error in facial recognition is insufficient amount of photos collected,
+as shown in figure~\ref{fig:false-recog2}. Even with 30 photos collected for each individual in advance,
+sometimes the result can still be faulty.
+\vspace{0.2cm}
+
+\begin{figure}[!htb]
+  \centering
+  \begin{subfigure}[b]{0.3\linewidth}
+    \includegraphics[width=\linewidth]{figures/false-recog-correct2.png}
+    \caption{Jay Chou}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.3\linewidth}
+    \includegraphics[width=\linewidth]{figures/false-recog-error2.png}
+    \caption{Jam Hsiao}
+  \end{subfigure}
+  \caption{Erroneous facial recognition, example 2.}
+  \label{fig:false-recog2}
+\end{figure}
+\vspace{0.5cm}
+
+
+Next, we
 With sufficient photos of students provided and their facial embeddings pre-computed,
 the system will be able to detect and recognize faces correctly. Currently, as shown
 
-to save time
-in classes, teachers and students will have to spend equivilently extra amount of time
+to save time in classes, teachers and students will have to spend equivilently extra amount of time
 before classes on the tasks such as collecting photos and pre-computing facial embeddings.
 This proves that there is a trade off between convenience and efficiency.
 \vspace{0.2cm}
