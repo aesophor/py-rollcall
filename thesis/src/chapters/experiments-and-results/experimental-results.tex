@@ -1,10 +1,10 @@
 \mySection{Experimental Results}
-With sufficient photos of students provided and their facial embeddings pre-computed,
-the system will be able to detect and recognize faces correctly. However, to save time
-in classes, teachers and students will have to spend equivilently extra amount of time
-before classes on the tasks such as collecting photos and pre-computing facial embeddings.
-This proves that there is a trade off between convenience and efficiency.
-\vspace{0.2cm}
+We want to find out how many photos must be collected from each individual in order to have PyRollCall reach its best performance.
+The results indicate that PyRollCall can achieve approximately \textbf{70\% to 85\%} of correct rate for facial recognition at its best
+if \textbf{25 to 30} photos are collected in advance from each individual.
+The raw data of our experiments is presented in table~\ref{tab:exp-result-tab},
+and we also visualize the data with a line chart, as shown in figure~\ref{fig:exp-result-chart}.
+\vspace{0.3cm}
 
 \begin{table}[!htb]
 \centering
@@ -21,8 +21,9 @@ Testing Set 3 & 9/20                       & 13/20                      & 14/20 
               & \multicolumn{1}{c}{(45\%)} & \multicolumn{1}{c}{(65\%)} & \multicolumn{1}{c}{(70\%)} & \multicolumn{1}{c}{(75\%)} & \multicolumn{1}{c}{(75\%)} & \multicolumn{1}{c}{(75\%)} \\ \addlinespace[0.5em]
 \bottomrule[2pt]
 \end{tabular}
-\label{tab:sometab}
+\label{tab:exp-result-tab}
 \end{table}
+\vspace{0.2cm}
 
 \begin{figure}[!htb]
   \centering
@@ -30,3 +31,15 @@ Testing Set 3 & 9/20                       & 13/20                      & 14/20 
   \caption{Visualization of the correct rate for PyRollCall's facial recognition feature.}
   \label{fig:exp-result-chart}
 \end{figure}
+\clearpage
+
+
+With sufficient photos of students provided and their facial embeddings pre-computed,
+the system will be able to detect and recognize faces correctly. Currently, as shown
+
+to save time
+in classes, teachers and students will have to spend equivilently extra amount of time
+before classes on the tasks such as collecting photos and pre-computing facial embeddings.
+This proves that there is a trade off between convenience and efficiency.
+\vspace{0.2cm}
+
