@@ -4,3 +4,29 @@ the system will be able to detect and recognize faces correctly. However, to sav
 in classes, teachers and students will have to spend equivilently extra amount of time
 before classes on the tasks such as collecting photos and pre-computing facial embeddings.
 This proves that there is a trade off between convenience and efficiency.
+\vspace{0.2cm}
+
+\begin{table}[!htb]
+\centering
+\caption{Correct rate for PyRollCall's facial recognition feature.} 
+\begin{tabular}{@{}lcccccc@{}}
+\toprule[2pt]
+& \multicolumn{6}{c}{Number of embeddings pre-computed per person}                                                                                                               \\ \addlinespace[0.5em]
+              & 5                          & 10                         & 15                         & 20                         & 25                         & 30                         \\ \midrule \addlinespace[0.5em]
+Testing Set 1 & 8/20                       & 10/20                      & 15/20                      & 17/20                      & 17/20                      & 17/20                      \\
+              & \multicolumn{1}{c}{(40\%)} & \multicolumn{1}{c}{(50\%)} & \multicolumn{1}{c}{(75\%)} & \multicolumn{1}{c}{(85\%)} & \multicolumn{1}{c}{(85\%)} & \multicolumn{1}{c}{(85\%)} \\ \addlinespace[0.5em] \midrule \addlinespace[0.5em]
+Testing Set 2 & 8/20                       & 10/20                      & 12/20                      & 13/20                      & 14/20                      & 14/20                      \\
+              & \multicolumn{1}{c}{(40\%)} & \multicolumn{1}{c}{(50\%)} & \multicolumn{1}{c}{(60\%)} & \multicolumn{1}{c}{(65\%)} & \multicolumn{1}{c}{(70\%)} & \multicolumn{1}{c}{(70\%)} \\ \addlinespace[0.5em] \midrule \addlinespace[0.5em]
+Testing Set 3 & 9/20                       & 13/20                      & 14/20                      & 15/20                      & 15/20                      & 15/20                      \\
+              & \multicolumn{1}{c}{(45\%)} & \multicolumn{1}{c}{(65\%)} & \multicolumn{1}{c}{(70\%)} & \multicolumn{1}{c}{(75\%)} & \multicolumn{1}{c}{(75\%)} & \multicolumn{1}{c}{(75\%)} \\ \addlinespace[0.5em]
+\bottomrule[2pt]
+\end{tabular}
+\label{tab:sometab}
+\end{table}
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.85\linewidth]{figures/exp-result-chart.png}
+  \caption{Visualization of the correct rate for PyRollCall's facial recognition feature.}
+  \label{fig:exp-result-chart}
+\end{figure}
