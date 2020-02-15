@@ -14,12 +14,10 @@ Finally, the correct rate $C_n$  for an experiment with respect to the parameter
 \end{equation}
 
 To assess how well our system can recognize faces with respect to different values of n,
-i.e., with different numbers of photos collected in advance from each person, we perform an experiment
-6 times on each testing set. Moreover, since we have three testing sets, we perform the experiment
-18 times in total. All values of $C_n$ collected from our experiments are presented in table~\ref{tab:exp-result-tab}.
+we perform the experiment 6 times with varying values of n on each testing set. Moreover,
+since we have three testing sets, we perform the experiment 18 times in total.
+All values of $C_n$ collected from our experiments are presented in table~\ref{tab:exp-result-tab},
 the visualization of which is shown in figure~\ref{fig:exp-result-chart}.
-The results indicate that PyRollCall can achieve approximately \textbf{70\% to 85\%} of correct rate
-for facial recognition at its best if \textbf{25 to 30} photos are collected in advance from each individual.
 \vspace{0.5cm}
 
 \begin{table}[!htb]
@@ -40,7 +38,10 @@ Avg. Correct Rate & 41.67\%                    & 55\%                       & 68
 \end{tabular}
 \label{tab:exp-result-tab}
 \end{table}
-\vspace{0.2cm}
+
+The results indicate that PyRollCall can achieve approximately \textbf{70\% to 85\%} of correct rate
+for facial recognition at its best if \textbf{25 to 30} photos are collected in advance from each individual.
+\vspace{0.5cm}
 
 \begin{figure}[!htb]
   \centering
@@ -48,10 +49,34 @@ Avg. Correct Rate & 41.67\%                    & 55\%                       & 68
   \caption{Visualization of the correct rates for PyRollCall's facial recognition feature.}
   \label{fig:exp-result-chart}
 \end{figure}
-\clearpage
 
 
-\subsection{Analysis of Correct Facial Recognition}
+
+\subsection{Analysis of Successful Facial Recognition}
+In facial recognition, various factors such as face occlusion, face tilt, head rotation and aging
+can pose a great challenge, and since our system is aimed to be practically used by educational
+organization, we have taken these factors into consideration.
+For instance, we have the legendary Hong Kong actor, Star Chow, as one of our participants. His photos
+in the training set covers various facial expressions, hairstyles, angle of faces and even different age.
+Figure~\ref{fig:correct-recog} demonstrates that even though most of his photos in the training set
+are of the young Star Chow without wearing glasses, PyRollCall can still successfully recognize
+the mid-aged Star Chow with glasses put on.
+
+\begin{figure}[!htb]
+  \centering
+  \begin{subfigure}[b]{0.65\linewidth}
+    \includegraphics[width=\linewidth]{figures/star-chow-training-set.png}
+    \caption{Star Chow's Training Set}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.3\linewidth}
+    \includegraphics[width=\linewidth]{figures/star-chow-success.png}
+    \caption{Star Chow}
+  \end{subfigure}
+  \caption{Example of successful facial recognition.}
+  \label{fig:correct-recog}
+\end{figure}
+\vspace{0.5cm}
 
 
 \subsection{Analysis of Faulty Facial Recognition}
@@ -97,7 +122,7 @@ sometimes the result can still be faulty.
 \vspace{0.5cm}
 
 
-\subsection{Analysis of Correct Facial Recognition}
+\subsection{Time Conservation}
 Next, we
 With sufficient photos of students provided and their facial embeddings pre-computed,
 the system will be able to detect and recognize faces correctly. Currently, as shown
