@@ -79,11 +79,13 @@ the mid-aged Star Chow with glasses put on.
 \vspace{0.5cm}
 
 
+
 \subsection{Analysis of Faulty Facial Recognition}
 In most cases, PyRollCall can recognize faces correctly as long as 25 to 30 photos are collected
 beforehand from each individual. However, sometimes erroneous facial recognition can still take place,
-especially if the targets are wearing makeup. Figure~\ref{fig:false-recog1} shows an example where
-faulty facial recognition happens due to makeup.
+especially when the targets wear makeup. Figure~\ref{fig:false-recog1} shows an example where
+faulty facial recognition occurs due to makeup, rendering the essential structures of two faces
+similar to each other.
 \vspace{0.2cm}
 
 \begin{figure}[!htb]
@@ -100,10 +102,10 @@ faulty facial recognition happens due to makeup.
   \label{fig:false-recog1}
 \end{figure}
 
-
 Another reason which can lead to error in facial recognition is insufficient amount of photos collected,
 as shown in figure~\ref{fig:false-recog2}. Even with 30 photos collected for each individual in advance,
-sometimes the result can still be faulty.
+sometimes the result can still be faulty.% Collecting 30 photos from each individual is already pretty
+%difficult, it would be impractical to require students to provide more than 30 photos.
 \vspace{0.2cm}
 
 \begin{figure}[!htb]
@@ -119,11 +121,36 @@ sometimes the result can still be faulty.
   \caption{Erroneous facial recognition, example 2.}
   \label{fig:false-recog2}
 \end{figure}
-\vspace{0.5cm}
+\vspace{0.2cm}
 
 
-\subsection{Time Conservation}
-Next, we
+
+\subsection{Integration with Educational Organization}
+Finally, in this section we discuss the effect of replacing traditional roll calls with PyRollCall.
+Currently, our experimental results show that PyRollCall can recognize faces with an accuracy of 70\% to 85\%
+at its best, provided that 25 to 30 photos are collected from each individual in advance.
+It is unknown to us whether collecting more than 30 photos from each person can yield higher correct rate
+for facial recognition, but 30 photos is already a great amount of photos to collect, even for
+public figures whose photos can be easily acquired on the Internet. Furthermore, collecting, organizing and pre-computing
+facial embeddings from photos will take quite a bit of time. In our experiments, the time we spent on pre-computing
+facial embeddings is presented in table~\ref{tab:time-spent-on-training}.
+
+\begin{table}[!htb]
+\centering
+\caption{Time spent on pre-computing facial embeddings for 20 people.} 
+\begin{tabular}{@{}lcccccc@{}}
+\toprule[2pt]
+& \multicolumn{6}{c}{Number of embeddings pre-computed per person}                    \\ \addlinespace[0.5em]
+                  & 5       & 10      & 15      & 20       & 25       & 30            \\ \midrule \addlinespace[0.5em]
+Time spent (secs) & 340.6   & 625.3   & 943.5   & 1296.6   & 1731.8   & 1946.5        \\ \addlinespace[0.5em]
+\bottomrule[2pt]
+\end{tabular}
+\label{tab:time-spent-on-training}
+\end{table}
+
+% TODO below
+Next, we discuss the time that can be conserved if a teacher replaces the traditional roll calls
+with PyRollCall.
 With sufficient photos of students provided and their facial embeddings pre-computed,
 the system will be able to detect and recognize faces correctly. Currently, as shown
 
@@ -131,3 +158,4 @@ to save time in classes, teachers and students will have to spend equivilently e
 before classes on the tasks such as collecting photos and pre-computing facial embeddings.
 This proves that there is a trade off between convenience and efficiency.
 \vspace{0.2cm}
+
