@@ -1,0 +1,102 @@
+\relax 
+\@writefile{toc}{\contentsline {chapter}{\numberline {1}Introduction}{2}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {1.1}Introduction to Facial Recognition Technology (FRT)}{3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1.1}Histogram of Oriented Gradients (HOG)}{4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1.2}Face Landmark Estimation}{4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1.3}Deep Metric Learning}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1.4}k-Nearest Neighbor (k-NN) Classification}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.2}Challenges of Automated Roll Calls}{6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.3}Thesis Organization}{6}\protected@file@percent }
+\citation{wem-2018}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}Related Works}{7}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}Facial Recognition Technology}{7}\protected@file@percent }
+\citation{chc-2012}
+\citation{zuvio-irs}
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}Barcode Scanning}{8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}RFID Chip Scanning}{8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}GPS Location Tracking}{8}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Roll Call System using Facial Recognition Technology: PyRollCall}{10}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}System Overview}{10}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces PyRollCall running on a Linux machine with X11\footnotemark \ installed.\relax }}{11}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:systemAppearance}{{3.1}{11}}
+\newlabel{lst:example-log}{{3.1}{12}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.1}Layout of PyRollCall's root directory.}{12}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.2}Shell commands to checkout and run PyRollCall}{12}\protected@file@percent }
+\citation{opencv}
+\citation{dlib}
+\citation{face-recognition}
+\citation{pygtk}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}PyRollCall Libraries}{13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}OpenCV}{13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}dlib}{13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}face\_recognition}{13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.4}PyGTK}{13}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}The Design of PyRollCall}{14}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Use Cases}{14}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Use Case Diagram\relax }}{14}\protected@file@percent }
+\newlabel{fig:use-case-diagram}{{3.2}{14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces System Architecture\relax }}{15}\protected@file@percent }
+\newlabel{fig:system-architecture}{{3.3}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}System Architecture}{15}\protected@file@percent }
+\newlabel{lst:proj-root-layout}{{3.3}{16}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.3}Layout of PyRollCall's root directory.}{16}\protected@file@percent }
+\newlabel{lst:modules-and-classes}{{3.4}{16}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.4}PyRollCall's modules and classes.}{16}\protected@file@percent }
+\newlabel{lst:faces-tree-output}{{3.5}{17}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.5}Example hierarchy of the \emph  {faces} directory.}{17}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Implementation}{17}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Pre-compute facial embeddings (encodings) of all faces in the \emph  {faces} directory.\relax }}{18}\protected@file@percent }
+\newlabel{alg:encode_faces}{{1}{18}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Recognize faces in an image and mark corresponding students as arrived.\relax }}{18}\protected@file@percent }
+\newlabel{alg:recognize_faces}{{2}{18}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Experiments and Results}{19}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Experimental Settings}{19}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces The training set contains 30 photos per individual.\relax }}{20}\protected@file@percent }
+\newlabel{fig:training-set}{{4.1}{20}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces A testing set for assessing the accuracy of PyRollCall's facial recognition feature.\relax }}{20}\protected@file@percent }
+\newlabel{fig:testing-set}{{4.2}{20}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Experimental Results}{21}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Accuracy of Facial Recognition}{21}\protected@file@percent }
+\newlabel{eq:correct-rate}{{4.1}{21}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Correct rates for PyRollCall's facial recognition feature.\relax }}{21}\protected@file@percent }
+\newlabel{tab:exp-result-tab}{{4.1}{21}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Visualization of the correct rates for PyRollCall's facial recognition feature.\relax }}{22}\protected@file@percent }
+\newlabel{fig:exp-result-chart}{{4.3}{22}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Analysis of Successful Facial Recognition}{22}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Example of successful facial recognition.\relax }}{23}\protected@file@percent }
+\newlabel{fig:correct-recog}{{4.4}{23}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Analysis of Faulty Facial Recognition}{23}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Erroneous facial recognition, example 1.\relax }}{23}\protected@file@percent }
+\newlabel{fig:false-recog1}{{4.5}{23}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Erroneous facial recognition, example 2.\relax }}{24}\protected@file@percent }
+\newlabel{fig:false-recog2}{{4.6}{24}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}Integration with Educational Organization}{24}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Time spent on pre-computing facial embeddings for 20 people.\relax }}{25}\protected@file@percent }
+\newlabel{tab:time-spent-on-training}{{4.2}{25}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Conclusion and Future Work}{26}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Conclusion}{26}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Future Work}{27}\protected@file@percent }
+\bibcite{wem-2018}{1}
+\bibcite{chc-2012}{2}
+\bibcite{zuvio-irs}{3}
+\bibcite{opencv}{4}
+\bibcite{dlib}{5}
+\bibcite{face-recognition}{6}
+\bibcite{pygtk}{7}
+\bibcite{adrian}{8}
+\@writefile{toc}{\contentsline {chapter}{Bibliography}{28}\protected@file@percent }
+\bibcite{bib1}{9}
+\bibcite{bib2}{10}
+\bibcite{bib3}{11}
+\bibcite{bib4}{12}

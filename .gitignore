@@ -3,5 +3,4 @@ logs/*
 photos/*
 scripts/*
 test/*
-thesis/build/*
 thesis/src/figures/*.pdf
