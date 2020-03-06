@@ -1,5 +1,5 @@
 ## Overview
-Facial recognition rollcall system using deep metric learning, i.e., deep learning-based facial recognition
+Facial recognition roll call system using deep metric learning, i.e., deep learning-based facial recognition
 
 ## Installation and Execution
 ```
