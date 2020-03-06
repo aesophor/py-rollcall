@@ -1,6 +1,9 @@
 ## Overview
 Facial recognition roll call system using deep metric learning, i.e., deep learning-based facial recognition
 
+## Requirement
+* Python >= 3.5
+
 ## Installation and Execution
 ```
 $ git clone https://github.com/aesophor/pyrollcall.git && cd pyrollcall
@@ -9,7 +12,6 @@ $ ./pyrollcall.py
 ```
 
 ## Dependencies (Already bundled in virtualenv)
-* Python >= 3.5
 * PyGTK **[2.24.0-r4](https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-python/pygtk/pygtk-2.24.0-r4.ebuild)**
 * OpenCV 3.4.5
 * imutils
