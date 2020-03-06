@@ -1,9 +1,3 @@
-<div align="center">
-<h3>pyrollcall</h3>
-<img src="https://i.imgur.com/f4yYQB2.png">
-1071 Image Processing Semester Project
-</div>
-
 ## Overview
 Automate traditional roll calls using deep metric learning, i.e., deep learning-based facial recognition.
 
