@@ -1,6 +1,8 @@
 pyrollcall/__pycache__/*
 logs/*
 photos/*
+faces/*
 scripts/*
 test/*
+thesis/experiments/utaipei*
 thesis/src/figures/*.pdf

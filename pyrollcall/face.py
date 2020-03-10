@@ -12,7 +12,7 @@ import time
 import pyrollcall.utils as utils
 
 
-g_encoding_model = 'cnn'
+g_encoding_model = 'hog'
 
 class FaceEncoding:
     """ This class is a wrapper of a face encoding and the student's id """
