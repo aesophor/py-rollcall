@@ -17,6 +17,8 @@ class Database:
         self.face_encodings = []
         self.encoded_face_img_paths = []
 
+        self.student_mapper = {}  # used as cache only, not serialized
+
     def load(self):
         """ Unpickle courses and students from the file """
         with open(self.db_file_path, 'rb') as f:
@@ -81,9 +83,14 @@ class Database:
         :param id: The id of the student
         :return: Student if found, None if not found
         """
+        if id in self.student_mapper:
+            return self.student_mapper[id]
+
         for s in self.students:
+            self.student_mapper[s.id] = s
             if s.id == id:
                 return s
+
         return None
 
     def remove_student(self, student):

@@ -26,11 +26,7 @@ std::vector<std::string> ListDirectory(const std::string& directory) {
   if ((dir = opendir(directory.c_str()))) {
     while ((ent = readdir(dir))) {
       if (strcmp(ent->d_name, ".") && strcmp(ent->d_name, "..")) {
-        if (ent->d_type == DT_DIR) {
-          std::cerr << "[WARNING] ignoring nested directory" << std::endl;
-        } else {
-          filenames.push_back(ent->d_name);
-        }
+        filenames.push_back(ent->d_name);
       }
     }
     closedir(dir);
@@ -49,19 +45,22 @@ int main(int argc, char* args[]) {
 
   const std::string video_dir(args[1]);
 
-  for (const auto& filename : ListDirectory(video_dir)) {
-    Student student(filename.substr(0, filename.rfind(".mp4")));
+  for (const auto& dirname : ListDirectory(video_dir)) {
+    Student student(dirname);
     std::cout << "[*] Processing: " << student.id << " " << student.name << std::endl;
 
-    // Create student's directory.
-    const std::string student_dir = student.id + "_" + student.name;
-    mkdir((video_dir + '/' + student_dir).c_str(), 0755);
+    for (const auto& filename : ListDirectory(video_dir + '/' + dirname)) {
+      std::string old_filename = video_dir + '/' + dirname + '/' + filename;
+      std::string new_filename = old_filename + "tmp";
+      rename(old_filename.c_str(), new_filename.c_str());
+    }
 
-    // Extract frames using ffmpeg.
-    const std::string vid_input = video_dir + '/' + filename;
-    const std::string vid_output = video_dir + '/' + student_dir;
-    const std::string cmd = std::string("ffmpeg -i '") + vid_input + "' -r 3 -start_number 0 '" + vid_output + "/" + student.name + "_\%d.png'";
-    std::cout << cmd << std::endl;
-    system(cmd.c_str());
+    int i = 0;
+    for (const auto& filename : ListDirectory(video_dir + '/' + dirname)) {
+      std::string old_filename = video_dir + '/' + dirname + '/' + filename;
+      std::string new_filename = video_dir + '/' + dirname + '/' + student.name + '_' + std::to_string(i) + ".png";
+      rename(old_filename.c_str(), new_filename.c_str());
+      i++;
+    }
   }
 }
