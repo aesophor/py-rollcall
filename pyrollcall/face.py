@@ -194,7 +194,7 @@ def recognize_faces(db, img_path: str, encoding_model=g_encoding_model):
             # first entry in the dict)
             student_id = max(counts, key=counts.get)
 
-            counts = {k: v for k, v in sorted(counts.items(), key=lambda item: item[1])}
+            counts = {k: v for k, v in sorted(counts.items(), key=lambda item: item[1], reverse=True)}
 
             for id, count in counts.items():
                 s = db.get_student(id)
