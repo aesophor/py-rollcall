@@ -125,37 +125,167 @@ sometimes the result can still be faulty.% Collecting 30 photos from each indivi
 
 
 
-\subsection{Integration with Educational Organization}
-Finally, in this section we discuss the effect of replacing traditional roll calls with PyRollCall.
-Currently, our experimental results show that PyRollCall can recognize faces with an accuracy of 70\% to 85\%
-at its best, provided that 25 to 30 photos are collected from each individual in advance.
-It is unknown to us whether collecting more than 30 photos from each person can yield higher correct rate
-for facial recognition, but 30 photos is already a great amount of photos to collect, even for
-public figures whose photos can be easily acquired on the Internet. Furthermore, collecting, organizing and pre-computing
-facial embeddings from photos will take quite a bit of time. In our experiments, the time we spent on pre-computing
-facial embeddings is presented in table~\ref{tab:time-spent-on-training}.
+\subsection{Experiment on Educational Organization}
+Finally, in this section we discuss the result of another experiment performed
+in real world scenarios. In this experiment, we have 30 students as our participants,
+and we collected approximately 70 photos from each student before carrying out the experiment
+which cover various angles of each face.~\ref{fig:precollect-example} shows the example of photos
+pre-collected from a student.
 
-\begin{table}[!htb]
+\begin{figure}[!htb]
+  \centering
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/upper-right.png}
+    \caption{Upper Right}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/upper-right2.png}
+    \caption{Upper Right2}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/upper-front.png}
+    \caption{Upper Front}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/upper-left2.png}
+    \caption{Upper Left 2}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/upper-left.png}
+    \caption{Upper Left}
+  \end{subfigure}
+
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/mid-right.png}
+    \caption{Mid Right}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/mid-right2.png}
+    \caption{Mid Right 2}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/mid-front.png}
+    \caption{Mid Front}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/mid-left2.png}
+    \caption{Mid Left 2}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/mid-left.png}
+    \caption{Mid Left}
+  \end{subfigure}
+
+   \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/lower-right.png}
+    \caption{Lower Right}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/lower-right2.png}
+    \caption{Lower Right 2}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/lower-front.png}
+    \caption{Lower Front}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/lower-left2.png}
+    \caption{Lower Left 2}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+    \includegraphics[height=3cm,keepaspectratio]{figures/me/lower-left.png}
+    \caption{Lower Left}
+  \end{subfigure}
+  \caption{Example of pre-collected photos from a participant.}
+  \label{fig:precollect-example}
+\end{figure}
+\vspace{0.5cm}
+
+However, even with more photos pre-collected from each student,
+this real-world experiment doesn't achieve the same accuracy for facial recognition
+as the previous experiment did. The experimental results are demonstrated in figure~\ref{fig:utaipei-exp-result},
+and the face detection rates and facial recognition accuracies are presented in table~\ref{tab:utaipei-exp-result}.
+\vspace{0.5cm}
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=\linewidth]{figures/utaipei/1.png}
+  \caption{Experimental result 1.}
+  \label{fig:utaipei-exp-result}
+\end{figure}
+\newpage
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=\linewidth]{figures/utaipei/2.png}
+  \caption{Experimental result 2.}
+  \label{fig:utaipei-exp-result}
+\end{figure}
+\vspace{0.5cm}
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=\linewidth]{figures/utaipei/3.png}
+  \caption{Experimental result 3.}
+  \label{fig:utaipei-exp-result}
+\end{figure}
+\newpage
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=\linewidth]{figures/utaipei/4.png}
+  \caption{Experimental result 4.}
+  \label{fig:utaipei-exp-result}
+\end{figure}
+\vspace{0.5cm}
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=\linewidth]{figures/utaipei/5.png}
+  \caption{Experimental result 5.}
+  \label{fig:utaipei-exp-result}
+\end{figure}
+\newpage
+
+
+\begin{table}[]
 \centering
-\caption{Time spent on pre-computing facial embeddings for 20 people.} 
+\caption{Experimental Results in University of Taipei.}
 \begin{tabular}{@{}lcccccc@{}}
 \toprule[2pt]
-& \multicolumn{6}{c}{Number of embeddings pre-computed per person}                    \\ \addlinespace[0.5em]
-                  & 5       & 10      & 15      & 20       & 25       & 30            \\ \midrule \addlinespace[0.5em]
-Time spent (secs) & 340.6   & 625.3   & 943.5   & 1296.6   & 1731.8   & 1946.5        \\ \addlinespace[0.5em]
+Experiment & Face Detection Rate & Facial Recognition Accuracy \\ \midrule \addlinespace[0.5em]
+1          & 10/15 (67\%)        & 4/10 (40\%)                 \\ \midrule \addlinespace[0.5em]
+2          & 12/13 (92\%)        & 3/12 (25\%)                 \\ \midrule \addlinespace[0.5em]
+3          & 11/12 (92\%)        & 4/11 (36\%)                 \\ \midrule \addlinespace[0.5em]
+4          & 16/18 (89\%)        & 2/16 (13\%)                 \\ \midrule \addlinespace[0.5em]
+5          & 11/14 (79\%)        & 3/11 (27\%)                 \\ \addlinespace[0.5em] \midrule[2pt] \addlinespace[0.5em]
+Avg        & 83.8\%              & 28.2\%                      \\
 \bottomrule[2pt]
 \end{tabular}
-\label{tab:time-spent-on-training}
+\label{tab:utaipei-exp-result}
 \end{table}
 
-% TODO below
-Next, we discuss the time that can be conserved if a teacher replaces the traditional roll calls
-with PyRollCall.
-With sufficient photos of students provided and their facial embeddings pre-computed,
-the system will be able to detect and recognize faces correctly. Currently, as shown
+\vspace{0.5cm}
+By observing the experimental result, as well as comparing the photos pre-collected
+in the previous experiment with the photos pre-collected in this experiment,
+we conclude several factors that could lead to erroneous facial recognition results:
+\vspace{0.5cm}
 
-to save time in classes, teachers and students will have to spend equivilently extra amount of time
-before classes on the tasks such as collecting photos and pre-computing facial embeddings.
-This proves that there is a trade off between convenience and efficiency.
+\setstretch{1.0}
+\begin{itemize}
+  \item The faces of the male celebrities used in the previous experiment are mostly distinguishable between one another,
+    thus achieving very good results.
+  \item The faces of the female celebrities used in the previous experiment are distinguishable by human eyes, but apparently
+    this is not the case for computers since the error rate for them are quite high.
+  \item Certain individual with highly distinguishable facial features has almost 100\% correct rate for facial recognition,
+    but for most students the correct rates are relatively low.
+  \item Studies \cite{err-facial-recog-tech} have shown that facial recognition technologies can produce widely inaccurate results, especially for non-whites.
+  \end{itemize}
+\setstretch{\myContentLineSpacing}
+
+
+Although the accuracy of facial recognition is not ideal enough, the system architecture proposed in this thesis
+still remains valuable and the facial recognition module (pyrollcall/face.py) can be replaced with better approaches
+in future researches.
 \vspace{0.2cm}
 
